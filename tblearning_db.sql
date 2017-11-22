@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 04, 2017 at 07:11 AM
+-- Generation Time: Nov 22, 2017 at 05:09 PM
 -- Server version: 10.1.28-MariaDB
 -- PHP Version: 7.1.10
 
@@ -25,26 +25,32 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `admin`
+-- Table structure for table `actions_links`
 --
 
-CREATE TABLE `admin` (
-  `internal_id` int(11) NOT NULL,
-  `sso_id` char(16) NOT NULL
+CREATE TABLE `actions_links` (
+  `Actions_Links_Instructor_ID` varchar(20) NOT NULL,
+  `Actions_Links_Master` int(4) NOT NULL,
+  `Actions_Links_Details` int(4) NOT NULL,
+  `Actions_Links_LinkedTables_ID` int(10) NOT NULL,
+  `Actions_Links_Deleted` int(1) DEFAULT NULL,
+  `Actions_Links_Date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `admin`
+-- Table structure for table `answers`
 --
 
-INSERT INTO `admin` (`internal_id`, `sso_id`) VALUES
-(4, 'agiujn'),
-(5, 'asdjbjhv'),
-(6, 'jbtend'),
-(1, 'jkv2c9'),
-(7, 'johnnyap'),
-(2, 'pfl'),
-(3, 'wenieh');
+CREATE TABLE `answers` (
+  `Answer_ID` int(10) NOT NULL,
+  `Answer_Desc` varchar(30) DEFAULT NULL,
+  `Answer_Question_ID` int(10) DEFAULT NULL,
+  `Answer_UserId` varchar(20) DEFAULT NULL,
+  `Answer_Deleted` int(1) DEFAULT NULL,
+  `Answer_Date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -53,294 +59,569 @@ INSERT INTO `admin` (`internal_id`, `sso_id`) VALUES
 --
 
 CREATE TABLE `course` (
-  `course_id` int(11) NOT NULL,
-  `course_code` char(16) DEFAULT NULL,
-  `course_title` char(64) DEFAULT NULL,
-  `year` int(4) DEFAULT NULL,
-  `semester` char(16) DEFAULT NULL,
-  `date_course_was_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `instructor_id` int(11) DEFAULT NULL
+  `Course_ID` int(10) NOT NULL,
+  `Course_code` varchar(10) DEFAULT NULL,
+  `Course_Desc` varchar(20) DEFAULT NULL,
+  `Course_year` int(4) DEFAULT NULL,
+  `Course_Semster` varchar(3) DEFAULT NULL,
+  `Course_Time` varchar(2) DEFAULT NULL,
+  `Course_Department_ID` int(10) NOT NULL,
+  `Course_UserID` varchar(20) NOT NULL,
+  `Course_Deleted` int(1) DEFAULT NULL,
+  `Course_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `course`
 --
 
-INSERT INTO `course` (`course_id`, `course_code`, `course_title`, `year`, `semester`, `date_course_was_created`, `instructor_id`) VALUES
-(1, 'cs4012', 'JavaWebEnterprise', 2017, 'Fall', '2017-10-26 04:09:33', NULL);
+INSERT INTO `course` (`Course_ID`, `Course_code`, `Course_Desc`, `Course_year`, `Course_Semster`, `Course_Time`, `Course_Department_ID`, `Course_UserID`, `Course_Deleted`, `Course_date`) VALUES
+(1, 'CMPSCI5012', 'Web Development', 17, 'FS', 'E', 1, '9999', 0, '2017-11-22 16:06:45');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `course_instructor`
+-- Table structure for table `customquiz`
 --
 
-CREATE TABLE `course_instructor` (
-  `relationship_id` int(11) NOT NULL,
-  `course_id` int(11) DEFAULT NULL,
-  `instructor_id` int(11) DEFAULT NULL
+CREATE TABLE `customquiz` (
+  `CustomQuiz_ID` int(10) NOT NULL,
+  `CustomQuiz_Status` int(1) DEFAULT NULL,
+  `CustomQuiz_QuizID` int(10) DEFAULT NULL,
+  `CustomQuiz_QustionID` int(10) DEFAULT NULL,
+  `CustomQuiz_UserID` varchar(20) DEFAULT NULL,
+  `CustomQuiz_Deleted` int(1) DEFAULT NULL,
+  `CustomQuiz_Date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `instructor`
+-- Table structure for table `departments`
 --
 
-CREATE TABLE `instructor` (
-  `internal_id` int(11) NOT NULL,
-  `sso_id` char(16) NOT NULL,
-  `department` char(32) NOT NULL
+CREATE TABLE `departments` (
+  `Department_ID` int(10) NOT NULL,
+  `Department_Code` varchar(5) DEFAULT NULL,
+  `Department_Desc` varchar(30) NOT NULL,
+  `Department_UserID` varchar(20) DEFAULT NULL,
+  `Department_Deleted` int(1) DEFAULT NULL,
+  `Department_Date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `instructor`
+-- Dumping data for table `departments`
 --
 
-INSERT INTO `instructor` (`internal_id`, `sso_id`, `department`) VALUES
-(1, 'jkv2c9', 'cmpsci'),
-(2, 'lf28j', 'meat'),
-(3, 'pfl', 'meat'),
-(4, 'jkv2c', 'cmpsci'),
-(5, 'wenieh', 'cmpsci'),
-(6, 'agiujn', 'cmpsci'),
-(7, 'asdjbjhv', 'cmpsci'),
-(8, 'jbtend', 'hard knocks');
+INSERT INTO `departments` (`Department_ID`, `Department_Code`, `Department_Desc`, `Department_UserID`, `Department_Deleted`, `Department_Date`) VALUES
+(1, 'HQ', 'Headquarter', '9999', 0, '2017-11-17 23:02:42'),
+(2, 'ADMN', 'Administration', '9999', 0, '2017-11-22 16:06:45'),
+(3, 'CS', 'Computer Scince', '9999', 0, '2017-11-22 16:06:45'),
+(4, 'MTS', 'Math and Statistics', '9999', 0, '2017-11-22 16:06:45'),
+(5, 'PHY', 'Pharmacy', '9999', 0, '2017-11-22 16:06:45'),
+(6, 'EDU', 'Education', '9999', 0, '2017-11-22 16:06:45');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `question`
+-- Table structure for table `groupanswers`
 --
 
-CREATE TABLE `question` (
-  `question_id` int(11) NOT NULL,
-  `content` char(255) NOT NULL,
-  `options` int(11) DEFAULT NULL,
-  `option_a` char(64) NOT NULL,
-  `option_b` char(64) NOT NULL,
-  `option_c` char(64) DEFAULT NULL,
-  `option_d` char(64) DEFAULT NULL,
-  `option_e` char(64) DEFAULT NULL,
-  `option_f` char(64) DEFAULT NULL,
-  `answer` char(64) NOT NULL,
-  `date_question_was_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `instructor_id` char(16) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `question`
---
-
-INSERT INTO `question` (`question_id`, `content`, `options`, `option_a`, `option_b`, `option_c`, `option_d`, `option_e`, `option_f`, `answer`, `date_question_was_created`, `instructor_id`) VALUES
-(1, '', NULL, '', '', NULL, NULL, NULL, NULL, '', '2017-11-04 05:42:46', '');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `quiz`
---
-
-CREATE TABLE `quiz` (
-  `quiz_id` int(11) NOT NULL,
-  `course_id` char(32) NOT NULL,
-  `quiz_number` int(11) NOT NULL,
-  `time_limit` time NOT NULL DEFAULT '00:00:00',
-  `start_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `end_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `date_quiz_was_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `instructor_id` char(32) NOT NULL
+CREATE TABLE `groupanswers` (
+  `GroupAnswers_Answer_value` int(10) NOT NULL,
+  `GroupAnswers_Group_ID` int(10) NOT NULL,
+  `GroupAnswers_Quiz_ID` int(10) NOT NULL,
+  `GroupAnswers_Question_ID` int(10) NOT NULL,
+  `GroupAnswers_Answer_Correction` int(2) DEFAULT NULL,
+  `GroupAnswers_Deleted` int(1) DEFAULT NULL,
+  `GroupAnswers_Date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `student`
+-- Table structure for table `groups`
 --
 
-CREATE TABLE `student` (
-  `internal_id` int(11) NOT NULL,
-  `sso_id` char(16) NOT NULL,
-  `student_number` int(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `student`
---
-
-INSERT INTO `student` (`internal_id`, `sso_id`, `student_number`) VALUES
-(1, 'jkv2c', 18114709);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `topic`
---
-
-CREATE TABLE `topic` (
-  `topic_id` int(11) NOT NULL,
-  `topic_title` char(64) NOT NULL,
-  `course_id` char(16) NOT NULL,
-  `date_topic_was_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `instructor_id` char(16) NOT NULL
+CREATE TABLE `groups` (
+  `Group_ID` int(10) NOT NULL,
+  `Group_Desc` varchar(10) DEFAULT NULL,
+  `Group_UserID` varchar(20) DEFAULT NULL,
+  `Group_Deleted` int(1) DEFAULT NULL,
+  `Group_Date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Table structure for table `linkedtables`
 --
 
-CREATE TABLE `user` (
-  `internal_id` int(11) NOT NULL,
-  `sso_id` char(16) NOT NULL,
-  `password` char(32) NOT NULL,
-  `first_name` char(16) NOT NULL,
-  `last_name` char(16) NOT NULL,
-  `admin` char(3) NOT NULL DEFAULT 'No',
-  `instructor` char(3) NOT NULL DEFAULT 'No',
-  `student` char(3) NOT NULL DEFAULT 'No',
-  `login_attempts` int(1) NOT NULL DEFAULT '0',
-  `date_account_was_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE `linkedtables` (
+  `LinkedTables_ID` int(4) NOT NULL,
+  `LinkedTables_Master` int(2) DEFAULT NULL,
+  `LinkedTables_Details` int(2) DEFAULT NULL,
+  `LinkedTables_UserID` varchar(20) DEFAULT NULL,
+  `LinkedTables_Deleted` int(1) DEFAULT NULL,
+  `LinkedTables_Date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `user`
+-- Dumping data for table `linkedtables`
 --
 
-INSERT INTO `user` (`internal_id`, `sso_id`, `password`, `first_name`, `last_name`, `admin`, `instructor`, `student`, `login_attempts`, `date_account_was_created`) VALUES
-(1, 'jkv2c9', 'password', 'Joshua', 'Veal-Briscoe', 'yes', 'yes', 'no', 0, '2017-10-19 23:17:31'),
-(5, 'lf28j', '', 'Jake', 'Steak', 'yes', 'yes', 'no', 0, '2017-10-25 02:12:25'),
-(6, 'pfl', '', 'pleasant', 'pheasant', 'yes', 'yes', 'no', 0, '2017-10-25 02:20:51'),
-(7, 'student', 'password', 'joshua', 'veal', 'yes', 'yes', 'no', 0, '2017-10-25 21:48:46'),
-(8, 'wenieh', '', 'wenjie', 'he', 'yes', 'yes', 'no', 0, '2017-10-25 22:30:17'),
-(9, 'agiujn', '', 'johsua', 'veal', 'yes', 'yes', 'no', 0, '2017-10-25 22:49:53'),
-(10, 'asdjbjhv', '', 'Josh', 'Veal', 'yes', 'yes', 'no', 0, '2017-11-02 00:00:25'),
-(11, 'jbtend', '', 'jack', 'black', 'yes', 'yes', 'no', 0, '2017-11-03 03:36:39'),
-(12, 'johnnyap', '7URNLYK82NFPSVEX', 'johnny', 'appleseed', 'No', 'No', 'No', 0, '2017-11-04 04:36:01'),
-(13, 'bobbyd', 'WA0FAXVJDELYKIHTT', 'bob', 'dylan', 'No', 'No', 'No', 0, '2017-11-04 04:41:50');
+INSERT INTO `linkedtables` (`LinkedTables_ID`, `LinkedTables_Master`, `LinkedTables_Details`, `LinkedTables_UserID`, `LinkedTables_Deleted`, `LinkedTables_Date`) VALUES
+(100, 10, 8, '9999', NULL, '2017-11-17 23:02:41'),
+(200, 10, 4, '9999', NULL, '2017-11-17 23:02:41'),
+(300, 10, 3, '9999', NULL, '2017-11-17 23:02:41'),
+(400, 4, 3, '9999', NULL, '2017-11-17 23:02:41'),
+(500, 6, 3, '9999', NULL, '2017-11-17 23:02:41'),
+(600, 3, 6, '9999', NULL, '2017-11-17 23:02:41');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `passwordtracking`
+--
+
+CREATE TABLE `passwordtracking` (
+  `PasswordTracking_SSO` varchar(20) NOT NULL,
+  `PasswordTracking_TryNO` int(2) DEFAULT NULL,
+  `PasswordTracking_DATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `passwordtracking`
+--
+
+INSERT INTO `passwordtracking` (`PasswordTracking_SSO`, `PasswordTracking_TryNO`, `PasswordTracking_DATE`) VALUES
+('jkv2c9', 0, '2017-11-22 16:06:45');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `questions`
+--
+
+CREATE TABLE `questions` (
+  `Question_ID` int(10) NOT NULL,
+  `Question_Desc` varchar(30) DEFAULT NULL,
+  `Question_Type` varchar(4) DEFAULT NULL,
+  `Question_Course_ID` int(10) DEFAULT NULL,
+  `Question_Tobics_ID` int(10) DEFAULT NULL,
+  `Question_correct_answer` int(3) DEFAULT NULL,
+  `Question_UserID` varchar(20) DEFAULT NULL,
+  `Question_Deleted` int(1) DEFAULT NULL,
+  `Question_Date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `quizzes`
+--
+
+CREATE TABLE `quizzes` (
+  `Quiz_ID` int(10) NOT NULL,
+  `Quiz_Desc` varchar(30) DEFAULT NULL,
+  `Quiz_Course_ID` int(10) DEFAULT NULL,
+  `Quiz_UserID` varchar(20) DEFAULT NULL,
+  `Quiz_Deleted` int(1) DEFAULT NULL,
+  `Quiz_Time_Limit` time DEFAULT NULL,
+  `Quiz_Start_Time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `Quiz_End_Time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `Quiz_Date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `studentanswers`
+--
+
+CREATE TABLE `studentanswers` (
+  `StudentAnswers_Answer_value` int(10) NOT NULL,
+  `StudentAnswers_Quiz_ID` int(10) NOT NULL,
+  `StudentAnswers_Question_ID` int(10) NOT NULL,
+  `StudentAnswers_Answer_Correction` int(2) DEFAULT NULL,
+  `StudentAnswers_UserId` varchar(20) NOT NULL,
+  `StudentAnswers_Deleted` int(1) DEFAULT NULL,
+  `StudentAnswers_Date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tablesdescription`
+--
+
+CREATE TABLE `tablesdescription` (
+  `Table_ID` int(2) NOT NULL,
+  `Table_Name` varchar(30) DEFAULT NULL,
+  `Table_UserID` varchar(20) DEFAULT NULL,
+  `Table_Deleted` int(1) DEFAULT NULL,
+  `Table_Date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tablesdescription`
+--
+
+INSERT INTO `tablesdescription` (`Table_ID`, `Table_Name`, `Table_UserID`, `Table_Deleted`, `Table_Date`) VALUES
+(1, 'departments', '9999', NULL, '2017-11-17 23:02:40'),
+(2, 'tblusertype', '9999', NULL, '2017-11-17 23:02:40'),
+(3, 'tblusers', '9999', NULL, '2017-11-17 23:02:40'),
+(4, 'groups', '9999', NULL, '2017-11-17 23:02:40'),
+(5, 'passwordtracking', '9999', NULL, '2017-11-17 23:02:40'),
+(6, 'Course', '9999', NULL, '2017-11-17 23:02:40'),
+(7, 'tobics', '9999', NULL, '2017-11-17 23:02:41'),
+(8, 'questions', '9999', NULL, '2017-11-17 23:02:41'),
+(9, 'Answers', '9999', NULL, '2017-11-17 23:02:41'),
+(10, 'QUIZZES', '9999', NULL, '2017-11-17 23:02:41'),
+(11, 'Customquiz', '9999', NULL, '2017-11-17 23:02:41'),
+(12, 'Tables_Description', '9999', NULL, '2017-11-17 23:02:41'),
+(13, 'LinkedTables', '9999', NULL, '2017-11-17 23:02:41'),
+(14, 'Actions_links', '9999', NULL, '2017-11-17 23:02:41'),
+(15, 'StudentAnswers', '9999', NULL, '2017-11-17 23:02:41'),
+(16, 'GroupAnswers', '9999', NULL, '2017-11-17 23:02:41');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tblusers`
+--
+
+CREATE TABLE `tblusers` (
+  `TblUsers_SSO` varchar(20) NOT NULL,
+  `TblUsers_UserPass` varchar(20) NOT NULL,
+  `TblUsers_FirstName` varchar(20) NOT NULL,
+  `TblUsers_LastName` varchar(20) NOT NULL,
+  `TblUsers_UsertypeID` varchar(5) NOT NULL,
+  `TblUsers_Department_ID` int(10) NOT NULL,
+  `TblUsers_User_Number` int(10) NOT NULL,
+  `TblUsers_Deleted` int(1) DEFAULT NULL,
+  `TblUsers_UserDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `TblUsers_Email` varchar(40) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tblusers`
+--
+
+INSERT INTO `tblusers` (`TblUsers_SSO`, `TblUsers_UserPass`, `TblUsers_FirstName`, `TblUsers_LastName`, `TblUsers_UsertypeID`, `TblUsers_Department_ID`, `TblUsers_User_Number`, `TblUsers_Deleted`, `TblUsers_UserDate`, `TblUsers_Email`) VALUES
+('9999', 'Admin', 'Application', 'Admin', 'ADM', 1, 1000, 0, '2017-11-17 23:02:42', NULL),
+('jkv2c9', 'ins', 'Application', 'Admin', 'INS', 1, 1000, 0, '2017-11-22 16:06:45', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tblusertype`
+--
+
+CREATE TABLE `tblusertype` (
+  `TblUserType_UsertypeID` varchar(5) NOT NULL,
+  `TblUserType_UserTypeDesc` varchar(30) NOT NULL,
+  `TblUserType_UserID` varchar(20) DEFAULT NULL,
+  `TblUserType_Deleted` int(1) DEFAULT NULL,
+  `TblUserType_Date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tblusertype`
+--
+
+INSERT INTO `tblusertype` (`TblUserType_UsertypeID`, `TblUserType_UserTypeDesc`, `TblUserType_UserID`, `TblUserType_Deleted`, `TblUserType_Date`) VALUES
+('ADM', 'Admin', '9999', 0, '2017-11-17 23:02:42'),
+('INAD', 'Instructor and Admin', '9999', 0, '2017-11-17 23:02:42'),
+('INS', 'Instructor', '9999', 0, '2017-11-17 23:02:42'),
+('STD', 'Student', '9999', 0, '2017-11-17 23:02:42');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tobics`
+--
+
+CREATE TABLE `tobics` (
+  `Tobics_ID` int(10) NOT NULL,
+  `Tobics_Desc` varchar(20) DEFAULT NULL,
+  `Tobics_Course_ID` int(10) DEFAULT NULL,
+  `Tobics_UserID` varchar(20) DEFAULT NULL,
+  `Tobics_Department_ID` int(10) NOT NULL,
+  `Tobics_Deleted` int(1) DEFAULT NULL,
+  `Tobics_Date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `Tobics_deatils` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `admin`
+-- Indexes for table `actions_links`
 --
-ALTER TABLE `admin`
-  ADD PRIMARY KEY (`internal_id`),
-  ADD UNIQUE KEY `sso_id` (`sso_id`);
+ALTER TABLE `actions_links`
+  ADD PRIMARY KEY (`Actions_Links_Instructor_ID`,`Actions_Links_Master`,`Actions_Links_Details`,`Actions_Links_LinkedTables_ID`),
+  ADD KEY `Actions_Links_LinkedTables_ID` (`Actions_Links_LinkedTables_ID`);
+
+--
+-- Indexes for table `answers`
+--
+ALTER TABLE `answers`
+  ADD PRIMARY KEY (`Answer_ID`),
+  ADD KEY `Answer_UserId` (`Answer_UserId`),
+  ADD KEY `Answer_Question_ID` (`Answer_Question_ID`);
 
 --
 -- Indexes for table `course`
 --
 ALTER TABLE `course`
-  ADD PRIMARY KEY (`course_id`),
-  ADD UNIQUE KEY `course_code` (`course_code`);
+  ADD PRIMARY KEY (`Course_ID`),
+  ADD UNIQUE KEY `Course_code` (`Course_code`),
+  ADD KEY `Course_UserID` (`Course_UserID`),
+  ADD KEY `Course_Department_ID` (`Course_Department_ID`);
 
 --
--- Indexes for table `course_instructor`
+-- Indexes for table `customquiz`
 --
-ALTER TABLE `course_instructor`
-  ADD PRIMARY KEY (`relationship_id`);
+ALTER TABLE `customquiz`
+  ADD PRIMARY KEY (`CustomQuiz_ID`),
+  ADD KEY `CustomQuiz_QuizID` (`CustomQuiz_QuizID`),
+  ADD KEY `CustomQuiz_UserID` (`CustomQuiz_UserID`),
+  ADD KEY `CustomQuiz_QustionID` (`CustomQuiz_QustionID`);
 
 --
--- Indexes for table `instructor`
+-- Indexes for table `departments`
 --
-ALTER TABLE `instructor`
-  ADD PRIMARY KEY (`internal_id`),
-  ADD UNIQUE KEY `sso_id` (`sso_id`);
+ALTER TABLE `departments`
+  ADD PRIMARY KEY (`Department_ID`);
 
 --
--- Indexes for table `question`
+-- Indexes for table `groupanswers`
 --
-ALTER TABLE `question`
-  ADD PRIMARY KEY (`question_id`);
+ALTER TABLE `groupanswers`
+  ADD KEY `GroupAnswers_Group_ID` (`GroupAnswers_Group_ID`),
+  ADD KEY `GroupAnswers_Quiz_ID` (`GroupAnswers_Quiz_ID`),
+  ADD KEY `GroupAnswers_Question_ID` (`GroupAnswers_Question_ID`);
 
 --
--- Indexes for table `quiz`
+-- Indexes for table `groups`
 --
-ALTER TABLE `quiz`
-  ADD PRIMARY KEY (`quiz_id`);
+ALTER TABLE `groups`
+  ADD PRIMARY KEY (`Group_ID`),
+  ADD KEY `Group_UserID` (`Group_UserID`);
 
 --
--- Indexes for table `student`
+-- Indexes for table `linkedtables`
 --
-ALTER TABLE `student`
-  ADD PRIMARY KEY (`internal_id`),
-  ADD UNIQUE KEY `sso_id` (`sso_id`),
-  ADD UNIQUE KEY `student_number` (`student_number`);
+ALTER TABLE `linkedtables`
+  ADD PRIMARY KEY (`LinkedTables_ID`),
+  ADD KEY `LinkedTables_Master` (`LinkedTables_Master`),
+  ADD KEY `LinkedTables_Details` (`LinkedTables_Details`);
 
 --
--- Indexes for table `topic`
+-- Indexes for table `passwordtracking`
 --
-ALTER TABLE `topic`
-  ADD PRIMARY KEY (`topic_id`);
+ALTER TABLE `passwordtracking`
+  ADD PRIMARY KEY (`PasswordTracking_SSO`);
 
 --
--- Indexes for table `user`
+-- Indexes for table `questions`
 --
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`internal_id`),
-  ADD UNIQUE KEY `sso_id` (`sso_id`);
+ALTER TABLE `questions`
+  ADD PRIMARY KEY (`Question_ID`),
+  ADD KEY `Question_UserID` (`Question_UserID`),
+  ADD KEY `Question_Course_ID` (`Question_Course_ID`),
+  ADD KEY `Question_Tobics_ID` (`Question_Tobics_ID`);
+
+--
+-- Indexes for table `quizzes`
+--
+ALTER TABLE `quizzes`
+  ADD PRIMARY KEY (`Quiz_ID`),
+  ADD KEY `Quiz_UserID` (`Quiz_UserID`),
+  ADD KEY `Quiz_Course_ID` (`Quiz_Course_ID`);
+
+--
+-- Indexes for table `studentanswers`
+--
+ALTER TABLE `studentanswers`
+  ADD KEY `StudentAnswers_Quiz_ID` (`StudentAnswers_Quiz_ID`),
+  ADD KEY `StudentAnswers_UserId` (`StudentAnswers_UserId`),
+  ADD KEY `StudentAnswers_Question_ID` (`StudentAnswers_Question_ID`);
+
+--
+-- Indexes for table `tablesdescription`
+--
+ALTER TABLE `tablesdescription`
+  ADD PRIMARY KEY (`Table_ID`);
+
+--
+-- Indexes for table `tblusers`
+--
+ALTER TABLE `tblusers`
+  ADD PRIMARY KEY (`TblUsers_SSO`),
+  ADD KEY `TblUsers_Department_ID` (`TblUsers_Department_ID`),
+  ADD KEY `TblUsers_UsertypeID` (`TblUsers_UsertypeID`);
+
+--
+-- Indexes for table `tblusertype`
+--
+ALTER TABLE `tblusertype`
+  ADD PRIMARY KEY (`TblUserType_UsertypeID`);
+
+--
+-- Indexes for table `tobics`
+--
+ALTER TABLE `tobics`
+  ADD PRIMARY KEY (`Tobics_ID`),
+  ADD KEY `Tobics_Course_ID` (`Tobics_Course_ID`),
+  ADD KEY `Tobics_UserID` (`Tobics_UserID`),
+  ADD KEY `Tobics_Department_ID` (`Tobics_Department_ID`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `admin`
+-- AUTO_INCREMENT for table `answers`
 --
-ALTER TABLE `admin`
-  MODIFY `internal_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+ALTER TABLE `answers`
+  MODIFY `Answer_ID` int(10) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `course`
 --
 ALTER TABLE `course`
-  MODIFY `course_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `Course_ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `course_instructor`
+-- AUTO_INCREMENT for table `customquiz`
 --
-ALTER TABLE `course_instructor`
-  MODIFY `relationship_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `customquiz`
+  MODIFY `CustomQuiz_ID` int(10) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `instructor`
+-- AUTO_INCREMENT for table `departments`
 --
-ALTER TABLE `instructor`
-  MODIFY `internal_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+ALTER TABLE `departments`
+  MODIFY `Department_ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `question`
+-- AUTO_INCREMENT for table `groups`
 --
-ALTER TABLE `question`
-  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `groups`
+  MODIFY `Group_ID` int(10) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `quiz`
+-- AUTO_INCREMENT for table `questions`
 --
-ALTER TABLE `quiz`
-  MODIFY `quiz_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `questions`
+  MODIFY `Question_ID` int(10) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `student`
+-- AUTO_INCREMENT for table `quizzes`
 --
-ALTER TABLE `student`
-  MODIFY `internal_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+ALTER TABLE `quizzes`
+  MODIFY `Quiz_ID` int(10) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `topic`
+-- AUTO_INCREMENT for table `tobics`
 --
-ALTER TABLE `topic`
-  MODIFY `topic_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tobics`
+  MODIFY `Tobics_ID` int(10) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `user`
+-- Constraints for dumped tables
 --
-ALTER TABLE `user`
-  MODIFY `internal_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- Constraints for table `actions_links`
+--
+ALTER TABLE `actions_links`
+  ADD CONSTRAINT `actions_links_ibfk_1` FOREIGN KEY (`Actions_Links_Instructor_ID`) REFERENCES `tblusers` (`TblUsers_SSO`),
+  ADD CONSTRAINT `actions_links_ibfk_2` FOREIGN KEY (`Actions_Links_LinkedTables_ID`) REFERENCES `linkedtables` (`LinkedTables_ID`);
+
+--
+-- Constraints for table `answers`
+--
+ALTER TABLE `answers`
+  ADD CONSTRAINT `answers_ibfk_1` FOREIGN KEY (`Answer_UserId`) REFERENCES `tblusers` (`TblUsers_SSO`),
+  ADD CONSTRAINT `answers_ibfk_2` FOREIGN KEY (`Answer_Question_ID`) REFERENCES `questions` (`Question_ID`);
+
+--
+-- Constraints for table `course`
+--
+ALTER TABLE `course`
+  ADD CONSTRAINT `course_ibfk_1` FOREIGN KEY (`Course_UserID`) REFERENCES `tblusers` (`TblUsers_SSO`),
+  ADD CONSTRAINT `course_ibfk_2` FOREIGN KEY (`Course_Department_ID`) REFERENCES `departments` (`Department_ID`);
+
+--
+-- Constraints for table `customquiz`
+--
+ALTER TABLE `customquiz`
+  ADD CONSTRAINT `customquiz_ibfk_1` FOREIGN KEY (`CustomQuiz_QuizID`) REFERENCES `quizzes` (`Quiz_ID`),
+  ADD CONSTRAINT `customquiz_ibfk_2` FOREIGN KEY (`CustomQuiz_UserID`) REFERENCES `tblusers` (`TblUsers_SSO`),
+  ADD CONSTRAINT `customquiz_ibfk_3` FOREIGN KEY (`CustomQuiz_QustionID`) REFERENCES `questions` (`Question_ID`);
+
+--
+-- Constraints for table `groupanswers`
+--
+ALTER TABLE `groupanswers`
+  ADD CONSTRAINT `groupanswers_ibfk_1` FOREIGN KEY (`GroupAnswers_Group_ID`) REFERENCES `groups` (`Group_ID`),
+  ADD CONSTRAINT `groupanswers_ibfk_2` FOREIGN KEY (`GroupAnswers_Quiz_ID`) REFERENCES `quizzes` (`Quiz_ID`),
+  ADD CONSTRAINT `groupanswers_ibfk_3` FOREIGN KEY (`GroupAnswers_Question_ID`) REFERENCES `questions` (`Question_ID`);
+
+--
+-- Constraints for table `groups`
+--
+ALTER TABLE `groups`
+  ADD CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`Group_UserID`) REFERENCES `tblusers` (`TblUsers_SSO`);
+
+--
+-- Constraints for table `linkedtables`
+--
+ALTER TABLE `linkedtables`
+  ADD CONSTRAINT `linkedtables_ibfk_1` FOREIGN KEY (`LinkedTables_Master`) REFERENCES `tablesdescription` (`Table_ID`),
+  ADD CONSTRAINT `linkedtables_ibfk_2` FOREIGN KEY (`LinkedTables_Details`) REFERENCES `tablesdescription` (`Table_ID`);
+
+--
+-- Constraints for table `questions`
+--
+ALTER TABLE `questions`
+  ADD CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`Question_UserID`) REFERENCES `tblusers` (`TblUsers_SSO`),
+  ADD CONSTRAINT `questions_ibfk_2` FOREIGN KEY (`Question_Course_ID`) REFERENCES `course` (`Course_ID`),
+  ADD CONSTRAINT `questions_ibfk_3` FOREIGN KEY (`Question_Tobics_ID`) REFERENCES `tobics` (`Tobics_ID`);
+
+--
+-- Constraints for table `quizzes`
+--
+ALTER TABLE `quizzes`
+  ADD CONSTRAINT `quizzes_ibfk_1` FOREIGN KEY (`Quiz_UserID`) REFERENCES `tblusers` (`TblUsers_SSO`),
+  ADD CONSTRAINT `quizzes_ibfk_2` FOREIGN KEY (`Quiz_Course_ID`) REFERENCES `course` (`Course_ID`);
+
+--
+-- Constraints for table `studentanswers`
+--
+ALTER TABLE `studentanswers`
+  ADD CONSTRAINT `studentanswers_ibfk_1` FOREIGN KEY (`StudentAnswers_Quiz_ID`) REFERENCES `quizzes` (`Quiz_ID`),
+  ADD CONSTRAINT `studentanswers_ibfk_2` FOREIGN KEY (`StudentAnswers_UserId`) REFERENCES `tblusers` (`TblUsers_SSO`),
+  ADD CONSTRAINT `studentanswers_ibfk_3` FOREIGN KEY (`StudentAnswers_Question_ID`) REFERENCES `questions` (`Question_ID`);
+
+--
+-- Constraints for table `tblusers`
+--
+ALTER TABLE `tblusers`
+  ADD CONSTRAINT `tblusers_ibfk_1` FOREIGN KEY (`TblUsers_Department_ID`) REFERENCES `departments` (`Department_ID`),
+  ADD CONSTRAINT `tblusers_ibfk_2` FOREIGN KEY (`TblUsers_UsertypeID`) REFERENCES `tblusertype` (`TblUserType_UsertypeID`);
+
+--
+-- Constraints for table `tobics`
+--
+ALTER TABLE `tobics`
+  ADD CONSTRAINT `tobics_ibfk_1` FOREIGN KEY (`Tobics_Course_ID`) REFERENCES `course` (`Course_ID`),
+  ADD CONSTRAINT `tobics_ibfk_2` FOREIGN KEY (`Tobics_UserID`) REFERENCES `tblusers` (`TblUsers_SSO`),
+  ADD CONSTRAINT `tobics_ibfk_3` FOREIGN KEY (`Tobics_Department_ID`) REFERENCES `departments` (`Department_ID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

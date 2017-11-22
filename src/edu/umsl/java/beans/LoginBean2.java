@@ -15,9 +15,6 @@ public class LoginBean2 {
     static final String DB_URL = "jdbc:mysql://localhost:3306/tblearning_db";
     static final String USER = "root";
     static final String PASS = "";
-   
-    public LoginBean2() {
-    }
 
 public void InsertDepartments(String Department_Code, String Department_Desc, String Department_UserID, Integer Department_Deleted)
 {
@@ -122,13 +119,13 @@ try {
 return ;
 }
 
-public void InsertCourse(String Course_code,String Course_Desc,Integer Course_year,String Course_Semster,String Course_Time, String Course_UserID, Integer Course_Deleted)
+public void InsertCourse(String Course_code,String Course_Desc,Integer Course_year,String Course_Semster,String Course_Time, Integer Course_Department_ID, String Course_UserID, Integer Course_Deleted)
 {
 try {
     Class.forName("com.mysql.jdbc.Driver"); 
     Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
     Statement stmt = conn.createStatement();
-    String this_query = "insert into Course  values('"+Course_code+"','"+Course_Desc+"',"+Course_year+",'"+Course_Semster+"','"+Course_Time+"','"+Course_UserID+"', "+Course_Deleted+");";
+    String this_query = "insert into Course  values('"+Course_code+"','"+Course_Desc+"',"+Course_year+",'"+Course_Semster+"','"+Course_Time+"','"+Course_Department_ID+"','"+Course_UserID+"', "+Course_Deleted+");";
     stmt.execute(this_query);
     stmt.close(); 
     conn.close();

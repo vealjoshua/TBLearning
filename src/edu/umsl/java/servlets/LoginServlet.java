@@ -68,7 +68,7 @@ public class LoginServlet extends HttpServlet {
 								request.getRequestDispatcher("/admin.jsp").forward(request, response);
 							}
 							else if(rs2.getString("TblUsers_UsertypeID").equals("INS")) {
-								response.sendRedirect(request.getContextPath() + "/instructor(1).jsp");
+								response.sendRedirect(request.getContextPath() + "/instructor.jsp");
 							}
 						}
 						else {
@@ -257,10 +257,11 @@ public class LoginServlet extends HttpServlet {
 			Integer Course_year = Integer.parseInt(request.getParameter("Course_year"));
 			String Course_Semster = request.getParameter("Course_Semster");
 			String Course_Time = request.getParameter("Course_Time");
+			Integer Couse_Department_ID = Integer.parseInt(request.getParameter("Couse_Department_ID"));
 			HttpSession session = request.getSession(false);
 			String Course_UserID = (String) session.getAttribute("userName");
 			LoginBean2 loginBean = new LoginBean2();
-			loginBean.InsertCourse(Course_code, Course_Desc, Course_year, Course_Semster, Course_Time, Course_UserID, 0);
+			loginBean.InsertCourse(Course_code, Course_Desc, Course_year, Course_Semster, Course_Time, Couse_Department_ID, Course_UserID, 0);
 		}
 		else if (task.equals("insertCustomQuiz")) {
 			Integer CustomQuiz_Status = Integer.parseInt(request.getParameter("CustomQuiz_Status"));

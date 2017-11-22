@@ -42,7 +42,7 @@ public class TimerFilter implements javax.servlet.Filter {
 				try {
 					rs2.next();
 					if (Pattern.matches("(.*)/admin.jsp", url)) {
-							if (rs2.getString("TblUsers_UsertypeID").equals("ADM")) {
+							if (!rs2.getString("TblUsers_UsertypeID").equals("ADM")) {
 								res.sendError(403, "User is not an admin.");
 								System.out.println("User is not an admin.");
 							}
@@ -50,7 +50,7 @@ public class TimerFilter implements javax.servlet.Filter {
 								chain.doFilter(request, response);
 		   	    	}
 		   	    	else if (Pattern.matches("(.*)/instructor.jsp", url)) {
-							if (rs2.getString("TblUsers_UsertypeID").equals("INS")) {
+							if (!rs2.getString("TblUsers_UsertypeID").equals("INS")) {
 								res.sendError(403, "User is not an instructor.");
 								System.out.println("User is not an instructor.");
 							}
