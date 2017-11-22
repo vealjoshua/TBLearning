@@ -261,11 +261,11 @@ public ResultSet getAllData(String sqlStm){
     try {
         Class.forName("com.mysql.jdbc.Driver"); 
         Connection conn = DriverManager.getConnection(DB_URL,USER,PASS);
-        Statement stmt = conn.createStatement();
-        String this_query=sqlStm;
-           ResultSet rs = stmt.executeQuery(this_query);
-           stmt.close();
-           conn.close();
+        Statement stmt = conn.createStatement();     
+        System.out.println(sqlStm);
+        ResultSet rs = stmt.executeQuery(sqlStm);
+//           stmt.close();
+//           conn.close();
      	return rs;
     } catch (Exception e) {
     }
@@ -280,8 +280,8 @@ try {
     Statement stmt = conn.createStatement();
     String this_query = DeleteStmt+"';";
     stmt.execute(this_query);
-    stmt.close(); 
-    conn.close();
+//    stmt.close(); 
+//    conn.close();
       } catch (ClassNotFoundException | SQLException e) {
   }
 return ;
@@ -294,8 +294,8 @@ try {
     Statement stmt = conn.createStatement();
     String this_query = UpdateStmt+"';";
     stmt.execute(this_query);
-    stmt.close(); 
-    conn.close();
+//    stmt.close(); 
+//    conn.close();
       } catch (ClassNotFoundException | SQLException e) {
   }
 return ;

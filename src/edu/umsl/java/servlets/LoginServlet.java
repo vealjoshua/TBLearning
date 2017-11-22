@@ -32,7 +32,8 @@ public class LoginServlet extends HttpServlet {
     // and it should be handled by doGet() method.
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String task = request.getParameter("task");
-		if (task == "login") { // Login
+		System.out.println(task);
+		if (task.equals("login")) { // Login
 			String ssoId = request.getParameter("ssoId");
 			String password = request.getParameter("password");		
 			
@@ -42,12 +43,7 @@ public class LoginServlet extends HttpServlet {
 			ResultSet rs = loginBean.getAllData(query);
 			try {
 				rs.next();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			
-			try {
+				System.out.println("Servlet marker 1");
 				if (rs.getString("PasswordTracking_SSO").equalsIgnoreCase(ssoId)) {
 					System.out.println("User verified.");
 					if(rs.getInt("PasswordTracking_TryNO") < 3) {
@@ -61,17 +57,17 @@ public class LoginServlet extends HttpServlet {
 							
 							rs.close();
 							// Start session
-							HttpSession session = createSession(request, response, ssoId);						
+							HttpSession session = createSession(request, response, ssoId);
 							request.setAttribute("session", session);
 
 							if (rs2.getString("TblUsers_UsertypeID").equals("ADM")) {
 								System.out.println("User is admin.");
-								
-//							request.getRequestDispatcher("/admin.jsp").forward(request, response);
-								
-								response.sendRedirect(request.getContextPath() + "/admin.jsp");
+								String query2 = "SELECT * FROM tblusertype";
+								ResultSet rs3 = loginBean.getAllData(query2);
+								request.setAttribute("resultSet", rs3);						
+								request.getRequestDispatcher("/admin.jsp").forward(request, response);
 							}
-							else if(rs.getString("TblUsers_UsertypeID").equals("INS")) {
+							else if(rs2.getString("TblUsers_UsertypeID").equals("INS")) {
 								response.sendRedirect(request.getContextPath() + "/instructor(1).jsp");
 							}
 						}
@@ -102,7 +98,7 @@ public class LoginServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
-		else if (task == "logout") { // Logout
+		else if (task.equals("logout")) { // Logout
 			HttpSession session = request.getSession(false);
 			session.invalidate();
 			
@@ -110,7 +106,7 @@ public class LoginServlet extends HttpServlet {
 //			dispatcher.forward(request, response);
 			response.sendRedirect(request.getContextPath() + "/login.jsp");
 		}
-		else if (task == "userCreation") { // User Creation
+		else if (task.equals("userCreation")) { // User Creation
 			String firstName = request.getParameter("firstName");
 			String lastName = request.getParameter("lastName");
 			String ssoId = request.getParameter("ssoId");
@@ -118,12 +114,11 @@ public class LoginServlet extends HttpServlet {
 			String userType = request.getParameter("optradio");
 			String email = request.getParameter("email");
 			Integer userId = Integer.parseInt(request.getParameter("userId"));
-			Integer deleted = 0;
 			
 			// Add user to database
 			LoginBean2 loginBean = new LoginBean2();
 			loginBean.CreateUser(ssoId, email, firstName, lastName, userType, department, userId, 0);
-			
+			loginBean.InsertPasswordTrack(ssoId);
 			System.out.println(firstName + " " + lastName + " " + ssoId + " " + department);
 			
 			SendEmail newEmail = new SendEmail();
@@ -138,9 +133,10 @@ public class LoginServlet extends HttpServlet {
 			request.getRequestDispatcher("/admin.jsp").forward(request, response); 
 //			response.sendRedirect(request.getContextPath() + "/admin.jsp");
 		}
-		else if (task == "topicCreation") { // Topic
+		else if (task.equals("topicCreation")) { // Topic
 				String Tobics_Desc = request.getParameter("Tobics_Desc");
-				String Tobics_UserID = request.getParameter("Tobics_UserID");
+				HttpSession session = request.getSession(false);
+				String Tobics_UserID = (String) session.getAttribute("userName");
 				Integer Tobics_Course_ID = Integer.parseInt(request.getParameter("Tobics_Course_ID"));
 				Integer Department_ID = Integer.parseInt(request.getParameter("Department_ID"));
 				LoginBean2 loginBean = new LoginBean2();
@@ -148,11 +144,12 @@ public class LoginServlet extends HttpServlet {
 				
 				request.getRequestDispatcher("/instructor.jsp").forward(request, response);
 		}
-		else if (task == "quizCreation") { // Quiz Creation
+		else if (task.equals("quizCreation")) { // Quiz Creation
 			try {
 				String Quiz_Desc = request.getParameter("Quiz_Desc");
 				Integer Quiz_Course_ID = Integer.parseInt(request.getParameter("Quiz_Course_ID"));
-				String Quiz_User_ID = request.getParameter("Quiz_User_ID");
+				HttpSession session = request.getSession(false);
+				String Quiz_User_ID = (String) session.getAttribute("userName");
 				String timeLimitString = request.getParameter("timeLimit");
 				String startTimeString = request.getParameter("startTime");
 				String endTimeString = request.getParameter("endTime");
@@ -170,129 +167,135 @@ public class LoginServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
-		else if (task == "questionCreation") { // Question Creation
+		else if (task.equals("questionCreation")) { // Question Creation
 			String Question_Desc = request.getParameter("Question_Desc");
 			String Question_Type = request.getParameter("Question_Type");
 			Integer Question_Tobics_ID = Integer.parseInt(request.getParameter("Question_Tobics_ID"));
 			Integer Question_Correct_Answer = Integer.parseInt(request.getParameter("Question_Correct_Answer"));
 			Integer Question_Course_ID = Integer.parseInt(request.getParameter("Question_Course_ID"));
-			String Question_UserID = request.getParameter("Question_UserID");
+			HttpSession session = request.getSession(false);
+			String Question_UserID = (String) session.getAttribute("userName");
 			
 			LoginBean2 loginBean = new LoginBean2();
 			loginBean.InsertQuestions(Question_Desc, Question_Type, Question_Course_ID, Question_Tobics_ID, Question_Correct_Answer, Question_UserID, 0);
 		}
-		else if (task == "toCreateCourse") {
+		else if (task.equals("toCreateCourse")) {
 			LoginBean2 loginBean = new LoginBean2();
 			String query = "SELECT * FROM course";
 			ResultSet rs = loginBean.getAllData(query);
 			request.setAttribute("resultSet", rs);
 			request.getRequestDispatcher("/createcourse.jsp").forward(request, response);
 		}
-		else if (task == "toCreateTopic") {
+		else if (task.equals("toCreateTopic")) {
 			LoginBean2 loginBean = new LoginBean2();
 			String query = "SELECT * FROM tobics";
 			ResultSet rs = loginBean.getAllData(query);
 			request.setAttribute("resultSet", rs);
 			request.getRequestDispatcher("/.jsp").forward(request, response);
 		}
-		else if (task == "toCreateQuiz") {
+		else if (task.equals("toCreateQuiz")) {
 			LoginBean2 loginBean = new LoginBean2();
 			String query = "SELECT * FROM quizzes";
 			ResultSet rs = loginBean.getAllData(query);
 			request.setAttribute("resultSet", rs);
 			request.getRequestDispatcher("/.jsp").forward(request, response);
 		}
-		else if (task == "toCreateQuestion") {
+		else if (task.equals("toCreateQuestion")) {
 			LoginBean2 loginBean = new LoginBean2();
 			String query = "SELECT * FROM questions";
 			ResultSet rs = loginBean.getAllData(query);
 			request.setAttribute("resultSet", rs);
 			request.getRequestDispatcher("/.jsp").forward(request, response);
 		}
-		else if (task == "departmentCreation") {
+		else if (task.equals("departmentCreation")) {
 			String Department_Code = request.getParameter("departmentCode");
 			String Department_Desc = request.getParameter("departmentDesc");
-			String Department_UserID = request.getParameter("departmentUserID");
+			HttpSession session = request.getSession(false);
+			String Department_UserID = (String) session.getAttribute("userName");
 			LoginBean2 loginBean = new LoginBean2();
 			loginBean.InsertDepartments(Department_Code, Department_Desc, Department_UserID, 0);
 		}
-		else if (task == "toDepartment") {
+		else if (task.equals("toDepartment")) {
 			LoginBean2 loginBean = new LoginBean2();
 			String query = "SELECT * FROM departments";
 			ResultSet rs = loginBean.getAllData(query);
 			request.setAttribute("resultSet", rs);
 			request.getRequestDispatcher("/.jsp").forward(request, response);
 		}
-		else if (task == "userTypeCreation") {
+		else if (task.equals("userTypeCreation")) {
 			String UsertypeID = request.getParameter("UsertypeID");
 			String UserTypeDesc = request.getParameter("UserTypeDesc");
-			String UserType_UserID = request.getParameter("UserType_UserID");
+			HttpSession session = request.getSession(false);
+			String UserType_UserID = (String) session.getAttribute("userName");
 			LoginBean2 loginBean = new LoginBean2();
 			loginBean.CreateUserType(UsertypeID, UserTypeDesc, UserType_UserID, 0);
 		}
-		else if (task == "toUserType") {
+		else if (task.equals("toAdmin")) {
 			LoginBean2 loginBean = new LoginBean2();
 			String query = "SELECT * FROM tblusertype";
 			ResultSet rs = loginBean.getAllData(query);
 			request.setAttribute("resultSet", rs);
 			request.getRequestDispatcher("/.jsp").forward(request, response);
 		}
-		else if (task == "groupCreation") {
+		else if (task.equals("groupCreation")) {
 			String Group_Desc = request.getParameter("Group_Desc");
-			String Group_UserId = request.getParameter("Group_UserId");
+			HttpSession session = request.getSession(false);
+			String Group_UserId = (String) session.getAttribute("userName");
 			LoginBean2 loginBean = new LoginBean2();
 			loginBean.InsertGroups(Group_Desc, Group_UserId, 0);
 		}
-		else if (task == "toGroup") {
+		else if (task.equals("toGroup")) {
 			LoginBean2 loginBean = new LoginBean2();
 			String query = "SELECT * FROM groups";
 			ResultSet rs = loginBean.getAllData(query);
 			request.setAttribute("resultSet", rs);
 			request.getRequestDispatcher("/.jsp").forward(request, response);
 		}
-		else if (task == "courseCreation") {
+		else if (task.equals("courseCreation")) {
 			String Course_code = request.getParameter("Course_code");
 			String Course_Desc = request.getParameter("Course_Desc");
 			Integer Course_year = Integer.parseInt(request.getParameter("Course_year"));
 			String Course_Semster = request.getParameter("Course_Semster");
 			String Course_Time = request.getParameter("Course_Time");
-			String Course_UserID = request.getParameter("Course_UserID");
+			HttpSession session = request.getSession(false);
+			String Course_UserID = (String) session.getAttribute("userName");
 			LoginBean2 loginBean = new LoginBean2();
 			loginBean.InsertCourse(Course_code, Course_Desc, Course_year, Course_Semster, Course_Time, Course_UserID, 0);
 		}
-		else if (task == "insertCustomQuiz") {
+		else if (task.equals("insertCustomQuiz")) {
 			Integer CustomQuiz_Status = Integer.parseInt(request.getParameter("CustomQuiz_Status"));
 			Integer CustomQuiz_QuisID = Integer.parseInt(request.getParameter("CustomQuiz_QuisID"));
 			Integer CustomQuiz_QustionID = Integer.parseInt(request.getParameter("CustomQuiz_QustionID"));
-			String CustomQuiz_UserID = request.getParameter("CustomQuiz_UserID");
+			HttpSession session = request.getSession(false);
+			String CustomQuiz_UserID = (String) session.getAttribute("userName");
 
 			LoginBean2 loginBean = new LoginBean2();
 			loginBean.InsertCustomQuiz(CustomQuiz_Status, CustomQuiz_QuisID, CustomQuiz_QustionID, CustomQuiz_UserID, 0);
 		}
-		else if (task == "insertTables_Description") {
+		else if (task.equals("InsertTables_Description")) {
 			String Table_Name = request.getParameter("Table_Name");
-			String Table_UserID = request.getParameter("Table_UserID");
+			HttpSession session = request.getSession(false);
+			String Table_UserID = (String) session.getAttribute("userName");
 
 			LoginBean2 loginBean = new LoginBean2();
 			loginBean.InsertTables_Description(Table_Name, Table_UserID, 0);
 		}
-		else if (task == "InsertLinkedTables") {
+		else if (task.equals("InsertLinkedTables")) {
 			Integer LinkedTables_Master = Integer.parseInt(request.getParameter("LinkedTables_Master"));
 			Integer LinkedTables_Details = Integer.parseInt(request.getParameter("LinkedTables_Details"));
-			String LinkedTables_UserID = request.getParameter("LinkedTables_UserID");
+			HttpSession session = request.getSession(false);
+			String LinkedTables_UserID = (String) session.getAttribute("userName");
 
 			LoginBean2 loginBean = new LoginBean2();
 			loginBean.InsertLinkedTables(LinkedTables_Master, LinkedTables_Details, LinkedTables_UserID, 0);
 		}
-		else if (task == "InsertActions_Links") {
-			Integer Actions_Links_Master = Integer.parseInt(request.getParameter("Actions_Links_Master"));
-			Integer Actions_Links_Details = Integer.parseInt(request.getParameter("Actions_Links_Details"));
-			Integer Actions_Links_LinkedTables_ID = Integer.parseInt(request.getParameter("Actions_Links_LinkedTables_ID"));
-			String Actions_Links_Instructor_ID = request.getParameter("Actions_Links_Instructor_ID");
-
+		else if (task.equals("deleteCourse")) {
+			String Course_code = request.getParameter("Course_code");
+			String query = "UPDATE course SET Course_Deleted = 1 WHERE Course_code = '"+Course_code+"';";
 			LoginBean2 loginBean = new LoginBean2();
-			loginBean.InsertActions_Links(Actions_Links_Instructor_ID, Actions_Links_Master, Actions_Links_Details, Actions_Links_LinkedTables_ID, 0);
+			loginBean.Update_Func(query);
 		}
+		
 	}
 	
 	private HttpSession createSession(HttpServletRequest request, HttpServletResponse response, String ssoId) throws IOException {

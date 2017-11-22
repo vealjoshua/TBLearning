@@ -130,8 +130,8 @@ public class SendEmail {
 //       transport.sendMessage(message, message.getAllRecipients());
 //       transport.close();
 	   
-	   final String user = "bearcowbearcow@gmail.com";
-		final String password = "xehanort66";
+	   final String user = "";
+		final String password = "";
 
 		String from = "bearcowbearcow@gmail.com";
 

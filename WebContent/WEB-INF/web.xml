@@ -23,6 +23,7 @@
     <url-pattern>/RegistrationServlet</url-pattern>
     <url-pattern>/CreateCourseServlet</url-pattern>
     <url-pattern>/createcourse.jsp</url-pattern>
+    <url-pattern>/course.jsp</url-pattern>
     <url-pattern>/admin2.jsp</url-pattern>
   </filter-mapping>
 </web-app>
