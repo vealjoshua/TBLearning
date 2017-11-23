@@ -110,7 +110,7 @@
      <a class="navbar-brand" href="instructor.jsp">TB Learning Application</a>
    </div>
    <ul class="nav navbar-nav">
-       <li class="active"><a href="createcourse.jsp">Courses</a></li>
+       <li class="active"><a href="course.jsp">Courses</a></li>
        <li><a href="student_creation.jsp">Student</a></li>
        <li><a href="#">Topics</a></li>
        <li><a href="#">Quiz</a></li>

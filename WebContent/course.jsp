@@ -1,4 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page import="java.sql.*"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,13 +49,30 @@
 				
 					<div class="col-sm-12">
 						<div class="row">
+						<div class="col-sm-6 form-group">
+						<label>Department</label>
+						 <select name="Course_Department_ID" class="form-control" style="width:250px;">  
+       <option value="none" >Select</option>  
+    <%
+ Class.forName("com.mysql.jdbc.Driver").newInstance();  
+ Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/tblearning_db","root","");  
+ Statement stmt = con.createStatement(); 
+ ResultSet rs = stmt.executeQuery("Select Department_ID,Department_Desc from departments");
+ while(rs.next()){
+     %>
+      <option value=<%=rs.getInt(1)%>><%=rs.getString(2)%></option>  
+      <%
+ }
+     %>
+      </select> 
+						</div>
 							<div class="col-sm-6 form-group">
 								<label>Course Code</label>
 								<input type="text"  name="Course_code" placeholder="Enter Course Code Here.." class="form-control" min="2" required>
 							</div>
-							<div class="col-sm-6 form-group">
+							<div class="col-sm-12 form-group">
 								<label>Course Title</label>
-								<input type="text"  name="Course_Desc" pattern="^[a-zA-Z0-9]+$" placeholder="Enter Course Title Here.." class="form-control" required>
+								<input type="text"  name="Course_Desc" pattern="^[a-zA-Z0-9\s]+$" placeholder="Enter Course Title Here.." class="form-control" required>
 							</div>
 						</div>	
                         <div class="clearfix visible-xs-block"> </div>

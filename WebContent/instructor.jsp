@@ -110,7 +110,7 @@
     <div class="col-sm-4">
      <div class="panel panel-primary">
      <div class="panel-heading"> Create Course<br></div>
-     <div class="panel-footer"><a href=createcourse.jsp>Create course</a></div>
+     <div class="panel-footer"><a href=course.jsp>Create course</a></div>
      </div></div>
 </div> </div> 
 </div>

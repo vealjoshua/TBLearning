@@ -14,7 +14,7 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
-import edu.umsl.java.beans.LoginBean2;
+import edu.umsl.java.beans.LoginBean;
 import edu.umsl.java.beans.SendEmail;
 import edu.umsl.java.beans.UserBean;
 import edu.umsl.java.database.CourseDB;
@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet {
 			String password = request.getParameter("password");		
 			
 			/* Check user name against the database */
-			LoginBean2 loginBean = new LoginBean2();
+			LoginBean loginBean = new LoginBean();
 			String query = "SELECT PasswordTracking_SSO, PasswordTracking_TryNO FROM passwordtracking WHERE PasswordTracking_SSO = '"+ssoId+"';";
 			ResultSet rs = loginBean.getAllData(query);
 			try {
@@ -116,7 +116,7 @@ public class LoginServlet extends HttpServlet {
 			Integer userId = Integer.parseInt(request.getParameter("userId"));
 			
 			// Add user to database
-			LoginBean2 loginBean = new LoginBean2();
+			LoginBean loginBean = new LoginBean();
 			loginBean.CreateUser(ssoId, email, firstName, lastName, userType, department, userId, 0);
 			loginBean.InsertPasswordTrack(ssoId);
 			System.out.println(firstName + " " + lastName + " " + ssoId + " " + department);
@@ -139,7 +139,7 @@ public class LoginServlet extends HttpServlet {
 				String Tobics_UserID = (String) session.getAttribute("userName");
 				Integer Tobics_Course_ID = Integer.parseInt(request.getParameter("Tobics_Course_ID"));
 				Integer Department_ID = Integer.parseInt(request.getParameter("Department_ID"));
-				LoginBean2 loginBean = new LoginBean2();
+				LoginBean loginBean = new LoginBean();
 				loginBean.InsertTobics(Tobics_Desc, Tobics_Course_ID, Tobics_UserID, Department_ID, 0);
 				
 				request.getRequestDispatcher("/instructor.jsp").forward(request, response);
@@ -161,7 +161,7 @@ public class LoginServlet extends HttpServlet {
 				Timestamp startTime = (Timestamp) timestampFormat.parse(startTimeString);
 				Timestamp endTime = (Timestamp) timestampFormat.parse(endTimeString);
 				
-				LoginBean2 loginBean = new LoginBean2();
+				LoginBean loginBean = new LoginBean();
 				loginBean.InsertQuizzes(Quiz_Desc, Quiz_Course_ID, Quiz_User_ID, 0, timeLimit, startTime, endTime);
 			} catch (ParseException e) {
 				e.printStackTrace();
@@ -176,32 +176,32 @@ public class LoginServlet extends HttpServlet {
 			HttpSession session = request.getSession(false);
 			String Question_UserID = (String) session.getAttribute("userName");
 			
-			LoginBean2 loginBean = new LoginBean2();
+			LoginBean loginBean = new LoginBean();
 			loginBean.InsertQuestions(Question_Desc, Question_Type, Question_Course_ID, Question_Tobics_ID, Question_Correct_Answer, Question_UserID, 0);
 		}
 		else if (task.equals("toCreateCourse")) {
-			LoginBean2 loginBean = new LoginBean2();
+			LoginBean loginBean = new LoginBean();
 			String query = "SELECT * FROM course";
 			ResultSet rs = loginBean.getAllData(query);
 			request.setAttribute("resultSet", rs);
-			request.getRequestDispatcher("/createcourse.jsp").forward(request, response);
+			request.getRequestDispatcher("/course.jsp").forward(request, response);
 		}
 		else if (task.equals("toCreateTopic")) {
-			LoginBean2 loginBean = new LoginBean2();
+			LoginBean loginBean = new LoginBean();
 			String query = "SELECT * FROM tobics";
 			ResultSet rs = loginBean.getAllData(query);
 			request.setAttribute("resultSet", rs);
 			request.getRequestDispatcher("/.jsp").forward(request, response);
 		}
 		else if (task.equals("toCreateQuiz")) {
-			LoginBean2 loginBean = new LoginBean2();
+			LoginBean loginBean = new LoginBean();
 			String query = "SELECT * FROM quizzes";
 			ResultSet rs = loginBean.getAllData(query);
 			request.setAttribute("resultSet", rs);
 			request.getRequestDispatcher("/.jsp").forward(request, response);
 		}
 		else if (task.equals("toCreateQuestion")) {
-			LoginBean2 loginBean = new LoginBean2();
+			LoginBean loginBean = new LoginBean();
 			String query = "SELECT * FROM questions";
 			ResultSet rs = loginBean.getAllData(query);
 			request.setAttribute("resultSet", rs);
@@ -212,11 +212,11 @@ public class LoginServlet extends HttpServlet {
 			String Department_Desc = request.getParameter("departmentDesc");
 			HttpSession session = request.getSession(false);
 			String Department_UserID = (String) session.getAttribute("userName");
-			LoginBean2 loginBean = new LoginBean2();
+			LoginBean loginBean = new LoginBean();
 			loginBean.InsertDepartments(Department_Code, Department_Desc, Department_UserID, 0);
 		}
 		else if (task.equals("toDepartment")) {
-			LoginBean2 loginBean = new LoginBean2();
+			LoginBean loginBean = new LoginBean();
 			String query = "SELECT * FROM departments";
 			ResultSet rs = loginBean.getAllData(query);
 			request.setAttribute("resultSet", rs);
@@ -227,11 +227,11 @@ public class LoginServlet extends HttpServlet {
 			String UserTypeDesc = request.getParameter("UserTypeDesc");
 			HttpSession session = request.getSession(false);
 			String UserType_UserID = (String) session.getAttribute("userName");
-			LoginBean2 loginBean = new LoginBean2();
+			LoginBean loginBean = new LoginBean();
 			loginBean.CreateUserType(UsertypeID, UserTypeDesc, UserType_UserID, 0);
 		}
 		else if (task.equals("toAdmin")) {
-			LoginBean2 loginBean = new LoginBean2();
+			LoginBean loginBean = new LoginBean();
 			String query = "SELECT * FROM tblusertype";
 			ResultSet rs = loginBean.getAllData(query);
 			request.setAttribute("resultSet", rs);
@@ -241,11 +241,11 @@ public class LoginServlet extends HttpServlet {
 			String Group_Desc = request.getParameter("Group_Desc");
 			HttpSession session = request.getSession(false);
 			String Group_UserId = (String) session.getAttribute("userName");
-			LoginBean2 loginBean = new LoginBean2();
+			LoginBean loginBean = new LoginBean();
 			loginBean.InsertGroups(Group_Desc, Group_UserId, 0);
 		}
 		else if (task.equals("toGroup")) {
-			LoginBean2 loginBean = new LoginBean2();
+			LoginBean loginBean = new LoginBean();
 			String query = "SELECT * FROM groups";
 			ResultSet rs = loginBean.getAllData(query);
 			request.setAttribute("resultSet", rs);
@@ -255,13 +255,17 @@ public class LoginServlet extends HttpServlet {
 			String Course_code = request.getParameter("Course_code");
 			String Course_Desc = request.getParameter("Course_Desc");
 			Integer Course_year = Integer.parseInt(request.getParameter("Course_year"));
-			String Course_Semster = request.getParameter("Course_Semster");
+			String Course_Semester = request.getParameter("Course_Semster");
 			String Course_Time = request.getParameter("Course_Time");
-			Integer Couse_Department_ID = Integer.parseInt(request.getParameter("Couse_Department_ID"));
+			System.out.println(Course_code + " " + Course_Desc + " " + Course_year + " " + Course_Semester + " " + Course_Time + " " + request.getParameter("Course_Department_ID"));
+			Integer Couse_Department_ID = Integer.parseInt(request.getParameter("Course_Department_ID"));
 			HttpSession session = request.getSession(false);
 			String Course_UserID = (String) session.getAttribute("userName");
-			LoginBean2 loginBean = new LoginBean2();
-			loginBean.InsertCourse(Course_code, Course_Desc, Course_year, Course_Semster, Course_Time, Couse_Department_ID, Course_UserID, 0);
+			System.out.println(Course_UserID);
+			LoginBean loginBean = new LoginBean();
+			loginBean.InsertCourse(Course_code, Course_Desc, Course_year, Course_Semester, Course_Time, Couse_Department_ID, Course_UserID, 0);
+			
+			response.sendRedirect(request.getContextPath() + "/course.jsp");
 		}
 		else if (task.equals("insertCustomQuiz")) {
 			Integer CustomQuiz_Status = Integer.parseInt(request.getParameter("CustomQuiz_Status"));
@@ -270,7 +274,7 @@ public class LoginServlet extends HttpServlet {
 			HttpSession session = request.getSession(false);
 			String CustomQuiz_UserID = (String) session.getAttribute("userName");
 
-			LoginBean2 loginBean = new LoginBean2();
+			LoginBean loginBean = new LoginBean();
 			loginBean.InsertCustomQuiz(CustomQuiz_Status, CustomQuiz_QuisID, CustomQuiz_QustionID, CustomQuiz_UserID, 0);
 		}
 		else if (task.equals("InsertTables_Description")) {
@@ -278,7 +282,7 @@ public class LoginServlet extends HttpServlet {
 			HttpSession session = request.getSession(false);
 			String Table_UserID = (String) session.getAttribute("userName");
 
-			LoginBean2 loginBean = new LoginBean2();
+			LoginBean loginBean = new LoginBean();
 			loginBean.InsertTables_Description(Table_Name, Table_UserID, 0);
 		}
 		else if (task.equals("InsertLinkedTables")) {
@@ -287,13 +291,13 @@ public class LoginServlet extends HttpServlet {
 			HttpSession session = request.getSession(false);
 			String LinkedTables_UserID = (String) session.getAttribute("userName");
 
-			LoginBean2 loginBean = new LoginBean2();
+			LoginBean loginBean = new LoginBean();
 			loginBean.InsertLinkedTables(LinkedTables_Master, LinkedTables_Details, LinkedTables_UserID, 0);
 		}
 		else if (task.equals("deleteCourse")) {
 			String Course_code = request.getParameter("Course_code");
 			String query = "UPDATE course SET Course_Deleted = 1 WHERE Course_code = '"+Course_code+"';";
-			LoginBean2 loginBean = new LoginBean2();
+			LoginBean loginBean = new LoginBean();
 			loginBean.Update_Func(query);
 		}
 		
