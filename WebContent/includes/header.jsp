@@ -109,13 +109,23 @@
      </button>
      <a class="navbar-brand" href="instructor.jsp">TB Learning Application</a>
    </div>
+   <form action="LoginServlet" method="post">
+   <input type="hidden" id="task" name="task"/>
    <ul class="nav navbar-nav">
-       <li class="active"><a href="course.jsp">Courses</a></li>
-       <li><a href="student_creation.jsp">Student</a></li>
-       <li><a href="#">Topics</a></li>
-       <li><a href="#">Quiz</a></li>
-       <li><a href="#">Group Quiz</a></li>
-     </ul>
+       <li class="active"><a href="#">User Type</a></li>
+       <li class="active"><a href="#">Department</a></li>
+       <li class="active"><a href="registrationform.jsp">Instructor</a></li>    
+       <li class="active"><button  type="submit" id="course" class="coursebtn">Courses</button></li>
+       <script>
+document.getElementById("course").onclick = function() {
+    document.getElementById("task").value = "toCreateCourse";                        
+   };
+    </script>
+       <li class="active"><a href="#">Table Description</a></li>
+       <li class="active"><a href="#">Linked Table</a></li>
+      
+    </ul>
+      </form>
     <ul class="nav navbar-nav navbar-right">
 <div class="none">
 <button onclick="myFunction()" class="dropbtn"> <span class="glyphicon glyphicon-user"></span>MyAccount</button>

@@ -16,13 +16,6 @@ import javax.servlet.http.*;
 
 import edu.umsl.java.beans.LoginBean;
 import edu.umsl.java.beans.SendEmail;
-import edu.umsl.java.beans.UserBean;
-import edu.umsl.java.database.CourseDB;
-import edu.umsl.java.database.LoginDB;
-import edu.umsl.java.database.QuestionDB;
-import edu.umsl.java.database.QuizDB;
-import edu.umsl.java.database.RegistrationDB;
-import edu.umsl.java.database.TopicDB;
 
 @WebServlet("/Servlet")
 public class LoginServlet extends HttpServlet {
@@ -184,7 +177,7 @@ public class LoginServlet extends HttpServlet {
 			String query = "SELECT * FROM course";
 			ResultSet rs = loginBean.getAllData(query);
 			request.setAttribute("resultSet", rs);
-			request.getRequestDispatcher("/course.jsp").forward(request, response);
+			request.getRequestDispatcher("/index.jsp").forward(request, response);
 		}
 		else if (task.equals("toCreateTopic")) {
 			LoginBean loginBean = new LoginBean();
@@ -294,13 +287,76 @@ public class LoginServlet extends HttpServlet {
 			LoginBean loginBean = new LoginBean();
 			loginBean.InsertLinkedTables(LinkedTables_Master, LinkedTables_Details, LinkedTables_UserID, 0);
 		}
+		else if (task.equals("InsertActionLinks")) {
+			Integer Actions_Links_Master = Integer.parseInt(request.getParameter("Actions_Links_Master"));
+			Integer Actions_Links_Details = Integer.parseInt(request.getParameter("Actions_Links_Details"));
+			Integer Actions_Links_LinkedTables_ID = Integer.parseInt(request.getParameter("Actions_Links_LinkedTables_ID"));
+			HttpSession session = request.getSession(false);
+			String Actions_Links_Instructor_ID = (String) session.getAttribute("userName");
+
+			LoginBean loginBean = new LoginBean();
+			loginBean.InsertActions_Links(Actions_Links_Instructor_ID, Actions_Links_Master, Actions_Links_Details, Actions_Links_LinkedTables_ID, 0);
+		}
+		else if (task.equals("deleteUser")) {
+			String TblUsers_SSO = request.getParameter("TblUsers_SSO");
+			String query = "UPDATE tblusers SET TblUsers_Deleted = 1 WHERE TblUsers_SSO = '"+TblUsers_SSO+"';";
+			LoginBean loginBean = new LoginBean();
+			loginBean.Update_Func(query);
+		}
+		else if (task.equals("deleteUserType")) {
+			String TblUserType_UsertypeID = request.getParameter("TblUserType_UsertypeID");
+			String query = "UPDATE tblusertype SET TblUserType_Deleted = 1 WHERE TblUserType_UsertypeID = '"+TblUserType_UsertypeID+"';";
+			LoginBean loginBean = new LoginBean();
+			loginBean.Update_Func(query);
+		}
+		else if (task.equals("deleteDepartment")) {
+			String Department_ID = request.getParameter("Department_ID");
+			String query = "UPDATE departments SET Department_Deleted = 1 WHERE Department_ID = '"+Department_ID+"';";
+			LoginBean loginBean = new LoginBean();
+			loginBean.Update_Func(query);
+		}
 		else if (task.equals("deleteCourse")) {
 			String Course_code = request.getParameter("Course_code");
 			String query = "UPDATE course SET Course_Deleted = 1 WHERE Course_code = '"+Course_code+"';";
 			LoginBean loginBean = new LoginBean();
 			loginBean.Update_Func(query);
 		}
-		
+		else if (task.equals("deleteTobic")) {
+			String Tobics_ID = request.getParameter("Tobics_ID");
+			String query = "UPDATE tobics SET Tobics_Deleted = 1 WHERE Tobics_ID = '"+Tobics_ID+"';";
+			LoginBean loginBean = new LoginBean();
+			loginBean.Update_Func(query);
+		}
+		else if (task.equals("deleteQuiz")) {
+			String Quiz_ID = request.getParameter("Quiz_ID");
+			String query = "UPDATE quizzes SET Quiz_Deleted = 1 WHERE Quiz_ID = '"+Quiz_ID+"';";
+			LoginBean loginBean = new LoginBean();
+			loginBean.Update_Func(query);
+		}
+		else if (task.equals("deleteCustomQuiz")) {
+			String CustomQuiz_ID = request.getParameter("CustomQuiz_ID");
+			String query = "UPDATE customquiz SET CustomQuiz_Deleted = 1 WHERE CustomQuiz_ID = '"+CustomQuiz_ID+"';";
+			LoginBean loginBean = new LoginBean();
+			loginBean.Update_Func(query);
+		}
+		else if (task.equals("deleteQuestion")) {
+			String Question_ID = request.getParameter("Question_ID");
+			String query = "UPDATE questions SET Question_Deleted = 1 WHERE Question_ID = '"+Question_ID+"';";
+			LoginBean loginBean = new LoginBean();
+			loginBean.Update_Func(query);
+		}
+		else if (task.equals("deleteGroup")) {
+			String Group_ID = request.getParameter("Group_ID");
+			String query = "UPDATE groups SET Group_Deleted = 1 WHERE Group_ID = '"+Group_ID+"';";
+			LoginBean loginBean = new LoginBean();
+			loginBean.Update_Func(query);
+		}
+		else if (task.equals("deleteActionsLink")) {
+			String Actions_Links_Instructor_ID = request.getParameter("Actions_Links_Instructor_ID");
+			String query = "UPDATE actions_links SET Actions_Links_Deleted = 1 WHERE Actions_Links_Instructor_ID = '"+Actions_Links_Instructor_ID+"';";
+			LoginBean loginBean = new LoginBean();
+			loginBean.Update_Func(query);
+		}
 	}
 	
 	private HttpSession createSession(HttpServletRequest request, HttpServletResponse response, String ssoId) throws IOException {

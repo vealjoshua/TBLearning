@@ -22,7 +22,7 @@ try {
     Class.forName("com.mysql.jdbc.Driver"); 
     Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
     Statement stmt = conn.createStatement();
-    String this_query = "insert into Departments (Department_Code, Department_Desc, Department_UserID, Department_Deleted) values('"+Department_Code+"','"+Department_Desc+"','"+Department_UserID+"',"+Department_Deleted+");";
+    String this_query = "insert into Departments  values('"+Department_Code+"','"+Department_Desc+"','"+Department_UserID+"',"+Department_Deleted+");";
     stmt.execute(this_query);
     stmt.close(); 
     conn.close();
@@ -37,7 +37,7 @@ try {
     Class.forName("com.mysql.jdbc.Driver"); 
     Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
     Statement stmt = conn.createStatement();
-    String this_query = "insert into TblUserType (UsertypeID, UserTypeDesc, UserType_UserID, UserType_Deleted) values('"+UsertypeID+"','"+UserTypeDesc+"','"+UserType_UserID+"',"+UserType_Deleted+");";
+    String this_query = "insert into TblUserType values('"+UsertypeID+"','"+UserTypeDesc+"','"+UserType_UserID+"',"+UserType_Deleted+");";
     stmt.execute(this_query); 
     stmt.close(); 
     conn.close();
@@ -52,7 +52,7 @@ try {
 	Class.forName("com.mysql.jdbc.Driver"); 
 	Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 	Statement stmt = conn.createStatement();
-	String this_query = "insert into TblUsers (SSO, UserEmail, FirstName, LastName, UserTaypeID, Department_ID, User_Number, User_Deleted) values('"+SSO+"','"+getSaltString()+"','"+FirstName+"','"+LastName+"','"+UserTaypeID+"','"+Department_ID+"',"+User_Number+",'"+User_Deleted+"','"+UserEmail+"');";
+	String this_query = "insert into TblUsers values('"+SSO+"','"+getSaltString()+"','"+FirstName+"','"+LastName+"','"+UserTaypeID+"','"+Department_ID+"',"+User_Number+",'"+User_Deleted+"','"+UserEmail+"');";
 	stmt.execute(this_query);
 	stmt.close(); 
 	conn.close();
@@ -80,7 +80,7 @@ try {
     Class.forName("com.mysql.jdbc.Driver"); 
     Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
     Statement stmt = conn.createStatement();
-    String this_query = "insert into Groups (Group_Desc, Group_UserId, Group_Deleted) values('"+Group_Desc+"','"+Group_UserId+"',"+Group_Deleted+");";
+    String this_query = "insert into Groups  values('"+Group_Desc+"','"+Group_UserId+"',"+Group_Deleted+");";
     stmt.execute(this_query);
     stmt.close(); 
     conn.close();
@@ -140,7 +140,7 @@ try {
     Class.forName("com.mysql.jdbc.Driver"); 
     Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
     Statement stmt = conn.createStatement();
-    String this_query = "insert into Tobics (Tobics_Desc, Tobics_Course_ID, Tobics_UserID, Department_ID, Topics_Deleted) values('"+Tobics_Desc+"','"+Tobics_Course_ID+"','"+Tobics_UserID+"',"+Department_ID+","+Topics_Deleted+");";
+    String this_query = "insert into Tobics  values('"+Tobics_Desc+"','"+Tobics_Course_ID+"','"+Tobics_UserID+"',"+Department_ID+","+Topics_Deleted+");";
     stmt.execute(this_query);
     stmt.close(); 
     conn.close();
@@ -155,7 +155,7 @@ try {
     Class.forName("com.mysql.jdbc.Driver"); 
     Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
     Statement stmt = conn.createStatement();
-    String this_query = "insert into Questions (Question_Desc, Question_Type, Question_Course_ID, Question_Tobics_ID, Question_Correct_Answer, Question_UserID, Question_Deleted) values('"+Question_Desc+"','"+Question_Type+"',"+Question_Course_ID+","+Question_Tobics_ID+","+Question_Correct_Answer+",'"+Question_UserID+"',"+Question_Deleted+";)";
+    String this_query = "insert into Questions  values('"+Question_Desc+"','"+Question_Type+"',"+Question_Course_ID+","+Question_Tobics_ID+","+Question_Correct_Answer+",'"+Question_UserID+"',"+Question_Deleted+";)";
     stmt.execute(this_query);
     stmt.close(); 
     conn.close();
@@ -170,7 +170,7 @@ try {
     Class.forName("com.mysql.jdbc.Driver"); 
     Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
     Statement stmt = conn.createStatement();
-    String this_query = "insert into Answers (Answer_Desc, Answer_Question_ID, Answer_UserId, Answer_Deleted) values('"+Answer_Desc+"',"+Answer_Question_ID+",'"+Answer_UserId+"',"+Answer_Deleted+");";
+    String this_query = "insert into Answers  values('"+Answer_Desc+"',"+Answer_Question_ID+",'"+Answer_UserId+"',"+Answer_Deleted+");";
     stmt.execute(this_query);
     stmt.close(); 
     conn.close();
@@ -185,7 +185,7 @@ try {
     Class.forName("com.mysql.jdbc.Driver"); 
     Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
     Statement stmt = conn.createStatement();
-    String this_query = "insert into Quizzes (Quiz_Desc, Quiz_Course_ID, Quiz_User_ID, Quiz_Deleted, Quiz_Time_Limit, Quiz_Start_Time, Quiz_EndTime) values('"+Quiz_Desc+"',"+Quiz_Course_ID+",'"+Quiz_User_ID+"',"+Quiz_Deleted+");";
+    String this_query = "insert into Quizzes  values('"+Quiz_Desc+"',"+Quiz_Course_ID+",'"+Quiz_User_ID+"',"+Quiz_Deleted+");";
     stmt.execute(this_query);
     stmt.close(); 
     conn.close();
@@ -200,7 +200,7 @@ try {
     Class.forName("com.mysql.jdbc.Driver"); 
     Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
     Statement stmt = conn.createStatement();
-    String this_query = "insert into CustomQuiz (CustomQuiz_Status, CustomQuiz_QuisID, CustomQuiz_QustionID, CustomQuiz_UserID, CustomQuiz_Deleted)  values("+CustomQuiz_Status+","+CustomQuiz_QuisID+","+CustomQuiz_QustionID+",'"+CustomQuiz_UserID+"',"+CustomQuiz_Deleted+");";
+    String this_query = "insert into CustomQuiz  values("+CustomQuiz_Status+","+CustomQuiz_QuisID+","+CustomQuiz_QustionID+",'"+CustomQuiz_UserID+"',"+CustomQuiz_Deleted+");";
     stmt.execute(this_query);
     stmt.close(); 
     conn.close();
@@ -215,7 +215,7 @@ try {
     Class.forName("com.mysql.jdbc.Driver"); 
     Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
     Statement stmt = conn.createStatement();
-    String this_query = "insert into Tables_Description (Table_Name, Table_UserID, Table_Deleted) values('"+Table_Name+"','"+Table_UserID+"', '"+Table_Deleted+"');";
+    String this_query = "insert into Tables_Description  values('"+Table_Name+"','"+Table_UserID+"', '"+Table_Deleted+"');";
     stmt.execute(this_query);
     stmt.close(); 
     conn.close();
@@ -230,7 +230,7 @@ try {
     Class.forName("com.mysql.jdbc.Driver"); 
     Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
     Statement stmt = conn.createStatement();
-    String this_query = "insert into LinkedTables (LinkedTables_Master, LinkedTables_Details, LinkedTables_UserID, LinkedTables_Deleted) values("+LinkedTables_Master+","+LinkedTables_Details+",'"+LinkedTables_UserID+"', "+LinkedTables_Deleted+");";
+    String this_query = "insert into LinkedTables  values("+LinkedTables_Master+","+LinkedTables_Details+",'"+LinkedTables_UserID+"', "+LinkedTables_Deleted+");";
     stmt.execute(this_query);
     stmt.close(); 
     conn.close();
@@ -245,7 +245,7 @@ try {
     Class.forName("com.mysql.jdbc.Driver"); 
     Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
     Statement stmt = conn.createStatement();
-    String this_query = "insert into Actions_Links (Actions_Links_Instructor_ID, Actions_Links_Master, Actions_Links_Details, Actions_Links_LinkedTables_ID, Actions_Links_Deleted) values("+Actions_Links_Instructor_ID+","+Actions_Links_Master+","+Actions_Links_Details+","+Actions_Links_LinkedTables_ID +","+Actions_Links_Deleted+");";
+    String this_query = "insert into Actions_Links  values("+Actions_Links_Instructor_ID+","+Actions_Links_Master+","+Actions_Links_Details+","+Actions_Links_LinkedTables_ID +","+Actions_Links_Deleted+");";
     stmt.execute(this_query);
     stmt.close(); 
     conn.close();
@@ -269,20 +269,6 @@ public ResultSet getAllData(String sqlStm){
     return null;
 }
 
-public void Delete_Func(String DeleteStmt)
-{
-try {
-    Class.forName("com.mysql.jdbc.Driver"); 
-    Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-    Statement stmt = conn.createStatement();
-    String this_query = DeleteStmt+"';";
-    stmt.execute(this_query);
-//    stmt.close(); 
-//    conn.close();
-      } catch (ClassNotFoundException | SQLException e) {
-  }
-return ;
-}
 public void Update_Func(String UpdateStmt)
 {
 try {

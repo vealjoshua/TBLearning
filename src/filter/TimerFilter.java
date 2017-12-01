@@ -8,8 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import edu.umsl.java.beans.LoginBean2;
-import edu.umsl.java.beans.UserBean;
+import edu.umsl.java.beans.LoginBean;
 
 
 public class TimerFilter implements javax.servlet.Filter { 
@@ -36,7 +35,7 @@ public class TimerFilter implements javax.servlet.Filter {
 	   	    	System.out.println("Timer Filter reporting: " + session.getId());
 	   	    	session.setMaxInactiveInterval(60);
 	   	    	 	
-	   	    	LoginBean2 loginBean = new LoginBean2();
+	   	    	LoginBean loginBean = new LoginBean();
 	   	    	String query = "SELECT * FROM tblusers WHERE TblUsers_SSO = '"+user+"';";
 	   	    	ResultSet rs2 = loginBean.getAllData(query);
 				try {
