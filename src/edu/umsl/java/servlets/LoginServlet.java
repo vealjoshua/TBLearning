@@ -32,41 +32,42 @@ public class LoginServlet extends HttpServlet {
 			
 			/* Check user name against the database */
 			LoginBean loginBean = new LoginBean();
-			String query = "SELECT PasswordTracking_SSO, PasswordTracking_TryNO FROM passwordtracking WHERE PasswordTracking_SSO = '"+ssoId+"';";
+			String query = "SELECT * FROM tblusers WHERE TblUsers_SSO = '"+ssoId+"';";
 			ResultSet rs = loginBean.getAllData(query);
 			try {
-				rs.next();
-				System.out.println("Servlet marker 1");
-				if (rs.getString("PasswordTracking_SSO").equalsIgnoreCase(ssoId)) {
+				if (rs.next()) {
 					System.out.println("User verified.");
-					if(rs.getInt("PasswordTracking_TryNO") < 3) {
-						String passQuery = "SELECT * FROM tblusers WHERE TblUsers_SSO = '"+ssoId+"';";
-						ResultSet rs2 = loginBean.getAllData(passQuery);
-						rs2.next();
+
+					String passQuery = "SELECT PasswordTracking_SSO, PasswordTracking_TryNO FROM passwordtracking WHERE PasswordTracking_SSO = '"+ssoId+"';";
+					ResultSet rs2 = loginBean.getAllData(passQuery);
+					rs2.next();
+							
+					if(rs2.getInt("PasswordTracking_TryNO") < 3) {
 						
-						if(rs2.getString("TblUsers_UserPass").equals(password)) {
+						
+						if(rs.getString("TblUsers_UserPass").equals(password)) {
 							System.out.println("Login successful.");
 							loginBean.UpdatePasswordTrack(ssoId, 0);
 							
-							rs.close();
+							rs2.close();
 							// Start session
 							HttpSession session = createSession(request, response, ssoId);
 							request.setAttribute("session", session);
 
-							if (rs2.getString("TblUsers_UsertypeID").equals("ADM")) {
+							if (rs.getString("TblUsers_UsertypeID").equals("ADM")) {
 								System.out.println("User is admin.");
 								String query2 = "SELECT * FROM tblusertype";
 								ResultSet rs3 = loginBean.getAllData(query2);
 								request.setAttribute("resultSet", rs3);						
 								request.getRequestDispatcher("/admin.jsp").forward(request, response);
 							}
-							else if(rs2.getString("TblUsers_UsertypeID").equals("INS")) {
+							else if(rs.getString("TblUsers_UsertypeID").equals("INS")) {
 								response.sendRedirect(request.getContextPath() + "/instructor.jsp");
 							}
 						}
 						else {
 							System.out.println("Failed login attempt.");
-							Integer tryNO = rs.getInt("PasswordTracking_TryNO");
+							Integer tryNO = rs2.getInt("PasswordTracking_TryNO");
 							tryNO += 1;
 							loginBean.UpdatePasswordTrack(ssoId, tryNO);
 							rs.close();
@@ -77,7 +78,7 @@ public class LoginServlet extends HttpServlet {
 					else {
 						System.out.println("User reached max login attempts.");
 						request.setAttribute("reachedFailedLoginAttempts", true);
-						rs.close();					
+						rs2.close();					
 						response.sendRedirect(request.getContextPath() + "/login.jsp");
 					}
 				}
