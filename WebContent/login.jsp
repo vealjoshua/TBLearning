@@ -91,7 +91,7 @@ body {
 										</div>
 											<input type="hidden" id="task" name="task"/>
 											<div class="col-sm-6  form-group">
-													<button type="cancel" id="forgotpassword" class="btn btn-lg btn-warning col-sm-3.5 col-md-offset-1" data-toggle="modal" data-target="#myModal">
+													<button type="button" id="forgotpassword" class="btn btn-lg btn-warning col-sm-3.5 col-md-offset-1" data-toggle="modal" data-target="#myModal">
 													<div class="col-spaced">Forgot Password</div></button> 	
 										</div>
 									<script>
@@ -102,7 +102,7 @@ body {
                                    </script>
                                   <script>
                                     document.getElementById("forgotpassword").onclick = function() {
-                                    document.getElementById("task").value = "forgotpassword";                        
+                                    document.getElementById("task").value = "forgotPassword";                        
                                     };
                                    
                                    </script>
@@ -112,17 +112,11 @@ body {
   </div>
   
 </div>
-
-
-
-
-
-
-
-								
+</fieldset>
+</form>
+ 								
 						 		</div>
-							</fieldset>
-						</form>
+							
 					</div>
 					
                 </div>

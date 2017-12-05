@@ -109,38 +109,31 @@
      </button>
      <a class="navbar-brand" href="instructor.jsp">TB Learning Application</a>
    </div>
-   <form action="LoginServlet" method="post">
-   <input type="hidden" id="task" name="task"/>
    <ul class="nav navbar-nav">
-       <li class="active"><a href="#">User Type</a></li>
-       <li class="active"><a href="#">Department</a></li>
-       <li class="active"><a href="registrationform.jsp">Instructor</a></li>    
-       <li class="active"><button  type="submit" id="course" class="coursebtn">Courses</button></li>
-       <script>
-document.getElementById("course").onclick = function() {
-    document.getElementById("task").value = "toCreateCourse";                        
-   };
-    </script>
-       <li class="active"><a href="#">Table Description</a></li>
-       <li class="active"><a href="#">Linked Table</a></li>
-      
-    </ul>
-      </form>
-    <ul class="nav navbar-nav navbar-right">
-<div class="none">
+       <li><a href="LoginServlet?task=toInstructorCourse">Courses</a></li><!--LoginServlet?task=toInstructorCourse  did display the resultset-->
+       <li><a href="LoginServlet?task=toStudent">Student</a></li><!-- modal+display+submit?-->
+       <li><a href="LoginServlet?task=toCreateTopic">Topics</a></li><!--  need reln -->
+       <li><a href="LoginServlet?task=toCreateQuestion">Questions</a></li><!-- uploading &submit +reln to get ans +plus only 4 options servlet accordingly -->
+       <li><a href="LoginServlet?task=toCreateQuiz">Quiz</a></li><!-- done min alone parsing issue -->
+       <li><a href="#">Group Quiz</a></li><!-- frm scratch-->
+     </ul>
+   <ul class="nav navbar-nav navbar-right" >
+  
+     <li class="active">
+     <div class="none">
 <button onclick="myFunction()" class="dropbtn"> <span class="glyphicon glyphicon-user"></span>MyAccount</button>
           
-            <div id="myDropdown" class="dropdown-content">
-                <a href="instructor.jsp">Change Password</a>
-                <a href="AccountSettingsServlet">About</a>
-             </div> 
-             <button  onclick="javascript:window.location='LogoutServlet';" class="logoutbtn">
-			<span class="glyphicon glyphicon-off"></span>Logout
-			</button>   
-           
-           
-        </div>
-     </ul>
+            <div id="myDropdown" class="dropdown-content" style="color:black;font-color:white">
+                <a href="change_password.jsp">Change Password</a>
+                <a href="#">Edit Details</a>
+             </div>
+             </div></li>
+             <li class="active">            
+              <a href="LoginServlet?task=logout">
+			<span class="glyphicon glyphicon-off"></span>Logout</a>
+			
+			</li></ul>
+
    </div>
  </div>
 </nav>

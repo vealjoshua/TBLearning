@@ -1,5 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page import="java.sql.*"%>
+<%@ page import="java.sql.ResultSet" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,9 +15,32 @@
   .modal-header {
   color: #fff;
     background-image: linear-gradient(255deg, #f9b25e, #f17b30);
-}</style>
+}
+#display {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#display td, #display thead {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+#display thead{
+font-weight: bold;
+background-color:black;
+color:white;
+}
+#panelbox{
+padding:10px,10px;}
+#panelwithtable{
+padding:10px;
+ border:1px solid black;
+}
+</style>
 </head>
 <body>
+<%@include file="includes/admin_header.jsp" %>
 
 <c:if test="${not empty sessionScope.msg1}">
  <div class="alert alert-success alert-dismissable">
@@ -29,23 +53,24 @@
   </div>
 
 </c:if>
-<div class="container">
-  <h2>Modal Example</h2>
+<div class="container" align="right">
+  
   <!-- Trigger the modal with a button -->
-  <button type="button" class="btn btn-info btn" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span></button>
+  <button type="button"  class="btn btn-info btn" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Add Course</button>
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
     
       <!-- Modal content-->
       <div class="modal-content">
-        <div class="modal-header">
+    <form data-toggle="validator" role="form" method="post" action="LoginServlet">
+	
+        <div class="modal-header" align="center">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title">Add Course</h4>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" align="left">
           	<div class="row">
-	<form data-toggle="validator" role="form" method="post" action="LoginServlet">
 				
 					<div class="col-sm-12">
 						<div class="row">
@@ -110,7 +135,7 @@
 
 
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" align="right">
         <div class="form-group">
 		<input type="hidden" id="task" name="task"/>
 		<button type="submit" id="createcourse" class="btn btn-lg btn-info col-sm-3.5 col-md-offset-0.5"><div class="col-spaced">Submit</div></button> 
@@ -124,7 +149,7 @@
  </script>
 	</div>				
 </center>				
-</div>
+</div></form>
      </div>
       
     </div>
@@ -132,5 +157,49 @@
   
 </div>
 
+<div class ="panel-body" align="center" id="panelbox">
+<div id="panelwithtable"  align="center" class = "panel panel-default" style="width:70%">
+   
+ <table align="center" width="50%"  cellspacing="6" id="display" style="width: 90%;">
+    
+      <thead>
+    
+
+<tr>
+							
+							<td  width="10%" >Course Id</td>
+							<td width="50%" >Course Title</td>
+							<td width="20%">Year Offered</td>
+							<td width="20%" >Semester</td>
+							
+					</tr>
+			</thead>
+				<%ResultSet rs2=(ResultSet)request.getAttribute("resultSet");String a="null";
+				while (rs2.next()) {%>
+				
+				
+				<% ;
+				
+				switch(rs2.getString(5))
+					{
+				case "FS":a="FALL";break;
+				case "SM":a="SUMMER";break;
+				case "SP":a="SPRING";break;
+				case "WN":a="WINTER";break;
+					default:break;
+					}
+					
+				%>
+<tr>	
+	<td id="<%rs2.getInt(1); %>" width="10%"> <%=rs2.getString(2) %></td>
+	<td id="<%rs2.getInt(1); %>" width="50%"> <%=rs2.getString(3) %></td>
+	<td id="<%rs2.getInt(1); %>" width="20%"> <%=rs2.getInt(4) %></td>
+	<td id="<%rs2.getInt(1); %>" width="20%"> <%=a %></td>
+	</tr>
+<%}%>
+
+</table>
+</div>
+</div>
 </body>
 </html>

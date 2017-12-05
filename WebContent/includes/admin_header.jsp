@@ -49,6 +49,22 @@
     background-color: white;
 }
 
+#course,#logout{
+border: none;
+    position: relative;
+    top: 12px;
+    background: transparent;
+    color: white;
+}
+
+#Cmain{
+    border: none;
+    position: relative;
+    top: 12px;
+    background: transparent;
+    color: white;
+}
+
 .dropbtn {
        position: relative;
    top: 13px;
@@ -97,6 +113,36 @@
 
 .show {display:block;}
 </style>
+
+    
+
+    <script>
+    /* When the user clicks on the button, 
+    toggle between hiding and showing the dropdown content */
+    function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+        }
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function(event) {
+        if (!event.target.matches('.dropbtn')) {
+
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+          var openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
+        }
+    }
+    </script>
+	<script>
+	$("#Cmain").click(function() {
+		  $("#course").trigger( "click" );
+		});
+	</script>
 </head>
 <body>
 <nav class="navbar navbar-inverse">
@@ -107,31 +153,40 @@
        <span class="icon-bar"></span>
        <span class="icon-bar"></span>                        
      </button>
+     
      <a class="navbar-brand" href="admin.jsp">TB Learning Application</a>
    </div>
-   <ul class="nav navbar-nav">
-       <li class="active"><a href="#">User Type</a></li>
-       <li class="active"><a href="#">Department</a></li>
-       <li class="active"><a href="registrationform.jsp">Instructor</a></li>
-       <li class="active"><a href="#">Courses</a></li>
-       <li class="active"><a href="#">Table Description</a></li>
-       <li class="active"><a href="#">Linked Table</a></li>
+   
+     <ul class="nav navbar-nav">
+      <!--  <li class="active"><a href="#">User Type</a></li>-->
+       <li class="active" ><a href="LoginServlet?task=toDepartment">Department</a></li>
+       <li class="active"><a  href="LoginServlet?task=toCreateUser">Instructor</a></li>     
+       <li class="active"><a href="LoginServlet?task=toCreateCourse">Courses</a></li>
+    <!--     <li class="active"><a href="#">Table Description</a></li>
+       <li class="active"><a href="#">Linked Table</a></li>-->
+      
      </ul>
-    <ul class="nav navbar-nav navbar-right">
-<div class="none">
+    
+    <ul class="nav navbar-nav navbar-right" >
+  
+     <li class="active">
+     <div class="none">
 <button onclick="myFunction()" class="dropbtn"> <span class="glyphicon glyphicon-user"></span>MyAccount</button>
           
-            <div id="myDropdown" class="dropdown-content">
-                <a href="forgot_password.jsp">Change Password</a>
+            <div id="myDropdown" class="dropdown-content" style="color:black;font-color:white">
+                <a href="change_password.jsp">Change Password</a>
                 <a href="#">Edit Details</a>
-             </div> 
-             <button  onclick="javascript:window.location='LogoutServlet';" class="logoutbtn">
-			<span class="glyphicon glyphicon-off"></span>Logout
-			</button>   
-       </div>
-     </ul>
-   </div>
- </div>
+             </div>
+             </div></li>
+             <li class="active">            
+              <a href="LoginServlet?task=logout">
+			<span class="glyphicon glyphicon-off"></span>Logout</a>
+			
+			</li></ul>
+	
+			</div>
+			
 </nav>
+ 
 </body>
 </html>

@@ -7,10 +7,10 @@ import javax.mail.internet.*;
 public class SendEmail {
 
 	public void email(String subject, String body, String to) throws MessagingException {
-		final String user = "";
-		final String password = "";
+		final String user = "fakeumslacc@gmail.com";
+		final String password = "easypass";
 	
-		String from = "bearcowbearcow@gmail.com";
+		String from = "fakeumslacc@gmail.com";
 	
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");

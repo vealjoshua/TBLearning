@@ -16,13 +16,13 @@ public class LoginBean {
     static final String USER = "root";
     static final String PASS = "";
 
-public void InsertDepartments(String Department_Code, String Department_Desc, String Department_UserID, Integer Department_Deleted)
+public void createDepartments(String Department_Code, String Department_Desc, String Department_UserID, Integer Department_Deleted)
 {
 try {
     Class.forName("com.mysql.jdbc.Driver"); 
     Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
     Statement stmt = conn.createStatement();
-    String this_query = "insert into Departments  values('"+Department_Code+"','"+Department_Desc+"','"+Department_UserID+"',"+Department_Deleted+");";
+    String this_query = "INSERT INTO departments (Department_Code, Department_Desc, Department_UserID VALUES ('"+Department_Code+"','"+Department_Desc+"','"+Department_UserID+"',"+Department_Deleted+");";
     stmt.execute(this_query);
     stmt.close(); 
     conn.close();
@@ -46,13 +46,13 @@ try {
 return ;
 }
 
-public void CreateUser(String SSO,String UserEmail,String FirstName,String LastName,String UserTaypeID,String Department_ID,Integer User_Number ,Integer User_Deleted )
+public void CreateUser(String SSO,String FirstName,String LastName,String userType,String Department_ID,Integer User_Number,Integer User_Deleted,String UserEmail)
 {
 try {
 	Class.forName("com.mysql.jdbc.Driver"); 
 	Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 	Statement stmt = conn.createStatement();
-	String this_query = "insert into TblUsers values('"+SSO+"','"+getSaltString()+"','"+FirstName+"','"+LastName+"','"+UserTaypeID+"','"+Department_ID+"',"+User_Number+",'"+User_Deleted+"','"+UserEmail+"');";
+	String this_query = "INSERT INTO tblusers (TblUsers_SSO, TblUsers_UserPass, TblUsers_FirstName, TblUsers_LastName, TblUsers_UsertypeID, TblUsers_Department_ID, TblUsers_User_Number, TblUsers_Deleted, TblUsers_Email) VALUES ('"+SSO+"','"+getSaltString()+"','"+FirstName+"','"+LastName+"','"+userType+"','"+Department_ID+"',"+User_Number+",'"+User_Deleted+"','"+UserEmail+"');";
 	stmt.execute(this_query);
 	stmt.close(); 
 	conn.close();
@@ -61,7 +61,7 @@ try {
 return ;
 }
 
-protected String getSaltString() {
+public String getSaltString() {
     String SALTCHARS = "abcdefghiklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#";
     Random rnd = new Random();
     char[] pass = new char[17];

@@ -24,7 +24,7 @@ public class TimerFilter implements javax.servlet.Filter {
 	    	 System.out.println(url);
 	    	}
 	    
-	    if (session.getAttribute("userName") == null /*|| session.getAttribute("ssoId") == null*/) {
+	    if (session == null /*|| session.getAttribute("ssoId") == null*/) {
 	    		System.out.println("Session is null");
 	    		HttpServletResponse httpResponse = (HttpServletResponse) response;
 	    		httpResponse.sendRedirect("login.jsp");

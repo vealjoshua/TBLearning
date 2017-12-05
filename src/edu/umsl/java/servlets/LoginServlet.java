@@ -25,7 +25,7 @@ public class LoginServlet extends HttpServlet {
     // and it should be handled by doGet() method.
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String task = request.getParameter("task");
-		System.out.println(task);
+		System.out.println("task is:" + task);
 		if (task.equals("login")) { // Login
 			String ssoId = request.getParameter("ssoId");
 			String password = request.getParameter("password");		
@@ -94,10 +94,9 @@ public class LoginServlet extends HttpServlet {
 		}
 		else if (task.equals("logout")) { // Logout
 			HttpSession session = request.getSession(false);
-			session.invalidate();
+			if(session != null)
+				session.invalidate();
 			
-//			RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
-//			dispatcher.forward(request, response);
 			response.sendRedirect(request.getContextPath() + "/login.jsp");
 		}
 		else if (task.equals("userCreation")) { // User Creation
@@ -111,10 +110,21 @@ public class LoginServlet extends HttpServlet {
 			
 			// Add user to database
 			LoginBean loginBean = new LoginBean();
-			loginBean.CreateUser(ssoId, email, firstName, lastName, userType, department, userId, 0);
+			loginBean.CreateUser(ssoId, firstName, lastName, userType, department, userId, 0, email);
 			loginBean.InsertPasswordTrack(ssoId);
-			System.out.println(firstName + " " + lastName + " " + ssoId + " " + department);
+			System.out.println("ssoID: " + ssoId + " firstName: " + firstName + " lastName: " + lastName + " password: " + loginBean.getSaltString() + " userType: " + userType + " department: " + department + " email: " + email + " userID: " + userId);
 			
+			request.getRequestDispatcher("/admin.jsp").forward(request, response); 
+//			response.sendRedirect(request.getContextPath() + "/admin.jsp");
+		}
+		else if (task.equals("changePasswordLink")) { // Topic
+			String email = request.getParameter("email");
+			String ssoId = request.getParameter("ssoId");
+
+			HttpSession session = createSession(request, response, ssoId);
+			request.setAttribute("session", session);
+			
+
 			SendEmail newEmail = new SendEmail();
 			try {
 				String subject = "Please create your new password!";
@@ -123,9 +133,22 @@ public class LoginServlet extends HttpServlet {
 			} catch (MessagingException e) {
 				e.printStackTrace();
 			}
-			
-			request.getRequestDispatcher("/admin.jsp").forward(request, response); 
-//			response.sendRedirect(request.getContextPath() + "/admin.jsp");
+		}
+		else if (task.equals("changePassword")) {
+			HttpSession session = request.getSession(false);
+			if (session != null)
+			{
+				String password = request.getParameter("password");
+				String TblUsers_SSO = (String) session.getAttribute("userName");
+				
+				String query = "UPDATE tblusers SET TblUsers_UserPass = '"+password+"' WHERE TblUsers_SSO = '"+TblUsers_SSO+"';";
+				LoginBean loginBean = new LoginBean();
+				loginBean.Update_Func(query);
+				
+				request.getRequestDispatcher("/change_password.jsp").forward(request, response);
+			}
+			else
+				response.sendRedirect(request.getContextPath() + "/login.jsp");
 		}
 		else if (task.equals("topicCreation")) { // Topic
 				String Tobics_Desc = request.getParameter("Tobics_Desc");
@@ -173,33 +196,55 @@ public class LoginServlet extends HttpServlet {
 			LoginBean loginBean = new LoginBean();
 			loginBean.InsertQuestions(Question_Desc, Question_Type, Question_Course_ID, Question_Tobics_ID, Question_Correct_Answer, Question_UserID, 0);
 		}
-		else if (task.equals("toCreateCourse")) {
+		else if (task.equals("toCreateUser")) {
 			LoginBean loginBean = new LoginBean();
-			String query = "SELECT * FROM course";
+			String query = "SELECT * FROM tblusers WHERE TblUsers_Deleted = 0";
 			ResultSet rs = loginBean.getAllData(query);
 			request.setAttribute("resultSet", rs);
-			request.getRequestDispatcher("/index.jsp").forward(request, response);
+			request.getRequestDispatcher("/registrationform.jsp").forward(request, response);
+		}
+		else if (task.equals("toCreateCourse")) {
+			LoginBean loginBean = new LoginBean();
+			String query = "SELECT * FROM course WHERE Course_Deleted = 0";
+			ResultSet rs = loginBean.getAllData(query);
+			request.setAttribute("resultSet", rs);
+			request.getRequestDispatcher("/course.jsp").forward(request, response);
+		}
+		else if (task.equals("toStudent")) {
+			LoginBean loginBean = new LoginBean();
+			String query = "SELECT * FROM tblusers WHERE TblUsers_UserTypeID = 'STD' AND TblUsers_Deleted = 0";
+			ResultSet rs = loginBean.getAllData(query);
+			request.setAttribute("resultSet", rs);
+			request.getRequestDispatcher("/student_creation.jsp").forward(request, response);
 		}
 		else if (task.equals("toCreateTopic")) {
 			LoginBean loginBean = new LoginBean();
-			String query = "SELECT * FROM tobics";
+			String query = "SELECT * FROM tobics INNER JOIN course ON tobics.Tobics_Course_ID = course.Course_ID WHERE Tobics_Deleted = 0";
 			ResultSet rs = loginBean.getAllData(query);
 			request.setAttribute("resultSet", rs);
-			request.getRequestDispatcher("/.jsp").forward(request, response);
+			request.getRequestDispatcher("/topics.jsp").forward(request, response);
+		}
+		else if (task.equals("selectTopicsFromCourse")) {
+			Integer Course_ID = Integer.parseInt(request.getParameter("Course_ID"));
+			LoginBean loginBean = new LoginBean();
+			String query = "SELECT * FROM tobics WHERE Tobics_Course_ID	= "+Course_ID+";";
+			ResultSet rs = loginBean.getAllData(query);
+			request.setAttribute("resultSet", rs);
+			request.getRequestDispatcher("/topics/.jsp").forward(request, response);
 		}
 		else if (task.equals("toCreateQuiz")) {
 			LoginBean loginBean = new LoginBean();
-			String query = "SELECT * FROM quizzes";
+			String query = "SELECT * FROM quizzes INNER JOIN course ON quizzes.Quiz_Course_ID = course.Course_ID WHERE Quiz_Deleted = 0";
 			ResultSet rs = loginBean.getAllData(query);
 			request.setAttribute("resultSet", rs);
-			request.getRequestDispatcher("/.jsp").forward(request, response);
+			request.getRequestDispatcher("/quiz_creation.jsp").forward(request, response);
 		}
 		else if (task.equals("toCreateQuestion")) {
 			LoginBean loginBean = new LoginBean();
-			String query = "SELECT * FROM questions";
+			String query = "SELECT * FROM questions WHERE Question_Deleted = 0";
 			ResultSet rs = loginBean.getAllData(query);
 			request.setAttribute("resultSet", rs);
-			request.getRequestDispatcher("/.jsp").forward(request, response);
+			request.getRequestDispatcher("/questions.jsp").forward(request, response);
 		}
 		else if (task.equals("departmentCreation")) {
 			String Department_Code = request.getParameter("departmentCode");
@@ -207,14 +252,19 @@ public class LoginServlet extends HttpServlet {
 			HttpSession session = request.getSession(false);
 			String Department_UserID = (String) session.getAttribute("userName");
 			LoginBean loginBean = new LoginBean();
-			loginBean.InsertDepartments(Department_Code, Department_Desc, Department_UserID, 0);
+			loginBean.createDepartments(Department_Code, Department_Desc, Department_UserID, 0);
+			
+			String query = "SELECT * FROM departments WHERE Department_Deleted = 0";
+			ResultSet rs = loginBean.getAllData(query);
+			request.setAttribute("resultSet", rs);
+			request.getRequestDispatcher("/department.jsp").forward(request, response);
 		}
 		else if (task.equals("toDepartment")) {
 			LoginBean loginBean = new LoginBean();
-			String query = "SELECT * FROM departments";
+			String query = "SELECT * FROM departments WHERE Department_Deleted = 0";
 			ResultSet rs = loginBean.getAllData(query);
 			request.setAttribute("resultSet", rs);
-			request.getRequestDispatcher("/.jsp").forward(request, response);
+			request.getRequestDispatcher("/department.jsp").forward(request, response);
 		}
 		else if (task.equals("userTypeCreation")) {
 			String UsertypeID = request.getParameter("UsertypeID");
@@ -229,7 +279,7 @@ public class LoginServlet extends HttpServlet {
 			String query = "SELECT * FROM tblusertype";
 			ResultSet rs = loginBean.getAllData(query);
 			request.setAttribute("resultSet", rs);
-			request.getRequestDispatcher("/.jsp").forward(request, response);
+			request.getRequestDispatcher("/admin.jsp").forward(request, response);
 		}
 		else if (task.equals("groupCreation")) {
 			String Group_Desc = request.getParameter("Group_Desc");
@@ -240,10 +290,17 @@ public class LoginServlet extends HttpServlet {
 		}
 		else if (task.equals("toGroup")) {
 			LoginBean loginBean = new LoginBean();
-			String query = "SELECT * FROM groups";
+			String query = "SELECT * FROM groups WHERE Group_Deleted = 0";
 			ResultSet rs = loginBean.getAllData(query);
 			request.setAttribute("resultSet", rs);
-			request.getRequestDispatcher("/.jsp").forward(request, response);
+			request.getRequestDispatcher("/instructor.jsp").forward(request, response);
+		}
+		else if (task.equals("toInstructorCourse")) {
+			LoginBean loginBean = new LoginBean();
+			String query = "SELECT * FROM course WHERE Course_Deleted = 0 LIMIT 5";
+			ResultSet rs = loginBean.getAllData(query);
+			request.setAttribute("resultSet", rs);
+			request.getRequestDispatcher("/instructor_course.jsp").forward(request, response);
 		}
 		else if (task.equals("courseCreation")) {
 			String Course_code = request.getParameter("Course_code");
@@ -259,7 +316,12 @@ public class LoginServlet extends HttpServlet {
 			LoginBean loginBean = new LoginBean();
 			loginBean.InsertCourse(Course_code, Course_Desc, Course_year, Course_Semester, Course_Time, Couse_Department_ID, Course_UserID, 0);
 			
-			response.sendRedirect(request.getContextPath() + "/course.jsp");
+			System.out.println("Course Created.");
+			
+			String query = "SELECT * FROM course WHERE Course_Deleted = 0";
+			ResultSet rs = loginBean.getAllData(query);
+			request.setAttribute("resultSet", rs);
+			request.getRequestDispatcher("/course.jsp").forward(request, response);
 		}
 		else if (task.equals("insertCustomQuiz")) {
 			Integer CustomQuiz_Status = Integer.parseInt(request.getParameter("CustomQuiz_Status"));
@@ -297,6 +359,14 @@ public class LoginServlet extends HttpServlet {
 
 			LoginBean loginBean = new LoginBean();
 			loginBean.InsertActions_Links(Actions_Links_Instructor_ID, Actions_Links_Master, Actions_Links_Details, Actions_Links_LinkedTables_ID, 0);
+		}
+		else if (task.equals("updateTopic")) {
+			String updateDesc = request.getParameter("updateDesc");
+			Integer Tobics_ID = Integer.parseInt(request.getParameter("Tobics_ID"));
+
+			String query = "UPDATE tobics SET Tobics_Desc = " + updateDesc + " WHERE Tobics_ID = " + Tobics_ID;
+			LoginBean loginBean = new LoginBean();
+			loginBean.Update_Func(query);
 		}
 		else if (task.equals("deleteUser")) {
 			String TblUsers_SSO = request.getParameter("TblUsers_SSO");
